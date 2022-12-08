@@ -8,4 +8,4 @@ This is where you can:
 The community repo is shared and monitored by developers, stakeholders and regular users. It is the resposibility for us all to look into this repository and help each other out. 
 
 
-**NOTE!** We are primarily using the "issues" (top left corner). 
+**NOTE!** We are primarily using the "issues" (top left corner) for bug-reports, and the "Discussions" for questions and discussions.
