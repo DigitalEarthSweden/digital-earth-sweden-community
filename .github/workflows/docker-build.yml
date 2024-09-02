@@ -29,4 +29,3 @@ jobs:
 
     - name: Image digest
       run: echo ${{ steps.docker_meta.outputs.digest }}
-
