@@ -1,0 +1,43 @@
+# Run with:
+#
+# conda env create --file environment.yml
+
+name: openeo-training
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.10
+  - gdal=3.6.3
+  - rasterio
+  - geopandas
+  - jupyterlab
+  - testbook
+  - pytest
+  - matplotlib
+  - pyyaml
+  - pydantic
+  - pip
+  - xarray
+ # ai-assistant
+  - llama-index
+  - pypdf
+  - python-dotenv
+#
+  - netcdf4  # for working with NetCDF files
+  - scipy  # fallback for reading/writing netCDF3 and for xarray interpolation features
+  - h5netcdf  # alternative library for reading and writing NetCDF4 files
+  - cftime  # for encoding/decoding datetimes for non-standard calendars
+  - dask  # for parallel computing with xarray
+  - bottleneck  # for speeding up certain operations in xarray
+  - numba  # for accelerating xarray operations, optional
+  - cartopy  # for plotting and mapping in geospatial applications
+  - seaborn  # for better color palettes in plots
+  - icecream # for nicer debug printouts
+  - descartes # plot polygons with holes
+  - pip:
+    - openeo
+    - rioxarray  # for rasterio xarray extensions, optional but useful for geospatial data
+    - nc-time-axis  # for plotting cftime.datetime objects with matplotlib
+

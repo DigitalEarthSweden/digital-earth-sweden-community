@@ -1,0 +1,42 @@
+FROM ubuntu:22.04 as eo_training_base
+
+# Install necessary packages
+RUN apt-get update && apt-get -y upgrade                               && \
+    apt-get install -y  --no-install-recommends  tree gosu sudo wget   && \
+    apt-get install -y  --no-install-recommends ca-certificates        && \
+    apt-get clean -y                                                   && \
+    rm -rf /var/lib/apt/lists/*                                        
+
+# Create user, add to sudo group, configure sudoers.
+RUN adduser --disabled-password --gecos '' ubuntu && \
+    usermod -aG sudo ubuntu && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers   
+ 
+USER ubuntu
+WORKDIR /home/ubuntu
+
+ENV PATH="/home/ubuntu/miniconda3/bin:${PATH}"
+ARG PATH="/home/ubuntu/miniconda3/bin:${PATH}"
+ 
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh  &&\
+    bash Miniconda3-latest-Linux-x86_64.sh -b                 && \
+    rm -f Miniconda3-latest-Linux-x86_64.sh                   && \
+    echo 'Running $(conda --version)'                         && \
+    /home/ubuntu/miniconda3/bin/conda init                    && \
+    . ~/.bashrc                                               && \
+    conda update conda  -y                                    && \
+    conda install -y -c conda-forge mamba    
+
+
+# Create the Conda environment
+COPY --chown=ubuntu:ubuntu environment.yml /home/ubuntu/environment.yml
+RUN conda env create -f /home/ubuntu/environment.yml                && \
+    conda clean -afy 
+
+COPY --chown=ubuntu:ubuntu tests /proj/tests
+COPY --chown=ubuntu:ubuntu examples/ /proj/examples
+
+WORKDIR /proj
+
+EXPOSE 5678 8000
+ENTRYPOINT ["bash", "-c", "source activate openeo-training && exec \"$@\"", "--"]
