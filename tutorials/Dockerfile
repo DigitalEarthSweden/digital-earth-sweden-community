@@ -33,8 +33,8 @@ COPY --chown=ubuntu:ubuntu environment.yml /home/ubuntu/environment.yml
 RUN conda env create -f /home/ubuntu/environment.yml                && \
     conda clean -afy 
 
-COPY --chown=ubuntu:ubuntu tests /proj/tests
-COPY --chown=ubuntu:ubuntu examples/ /proj/examples
+#COPY --chown=ubuntu:ubuntu tests /proj/tests
+COPY --chown=ubuntu:ubuntu ./ /proj/tutorial
 
 WORKDIR /proj
 
