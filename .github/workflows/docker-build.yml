@@ -24,7 +24,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:latest ./tutorial
+        docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:latest ./tutorials
         docker push harbor.main.rise-ck8s.com/des-public/tutorials:latest
 
     - name: Image digest
