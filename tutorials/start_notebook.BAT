@@ -7,6 +7,7 @@ set HOST_DIR=%cd%
 set CONTAINER_DIR=/proj
 
 REM Run the Docker container
+docker pull  %IMAGE_NAME%
 docker run --rm -it ^
     -p %NOTEBOOK_PORT%:8888 ^
     --name eo-training-notebook ^

@@ -7,6 +7,7 @@ HOST_DIR=$(pwd)  # The current directory
 CONTAINER_DIR="/proj"  # Directory inside the container
 
 # Run the Docker container
+docker pull $IMAGE_NAME
 docker run --rm -it \
     -p $NOTEBOOK_PORT:8888 \
     --name eo-training-notebook \
