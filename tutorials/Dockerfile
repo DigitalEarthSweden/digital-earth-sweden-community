@@ -33,10 +33,13 @@ COPY --chown=ubuntu:ubuntu environment.yml /home/ubuntu/environment.yml
 RUN conda env create -f /home/ubuntu/environment.yml                && \
     conda clean -afy 
 
-#COPY --chown=ubuntu:ubuntu tests /proj/tests
-COPY --chown=ubuntu:ubuntu ./ /proj/tutorial
-
+# Set up the working directory and copy files
+COPY --chown=ubuntu:ubuntu . /proj/
+ENV PYTHONPATH="/proj/tutorials:${PYTHONPATH}"
 WORKDIR /proj
 
-EXPOSE 5678 8000
-ENTRYPOINT ["bash", "-c", "source activate openeo-training && exec \"$@\"", "--"]
+# Expose the necessary ports
+EXPOSE 8888
+
+# Set the entry point to automatically start Jupyter Lab
+ENTRYPOINT ["bash", "-c", "source activate openeo-training && jupyter lab --port=8888 --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/proj --no-browser"]

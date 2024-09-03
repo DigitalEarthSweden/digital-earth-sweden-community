@@ -14,7 +14,6 @@ from io import BytesIO
 import xarray as xr
 from io import BytesIO
  
-
 # -----------------------------------------------------------------------------
 #                               showfig
 # -----------------------------------------------------------------------------
@@ -29,10 +28,15 @@ def showfig(data,flag = None,figsize=(5,5),ax=None):
     if colorbar:
         plt.colorbar()
         
+# Normalize the data to the range 0-255 for display
+def normalize(array):
+    array_min, array_max = np.percentile(array, (1, 99))  # Clip values between 1st and 99th percentile
+    array = np.clip(array, array_min, array_max)  # Clip the extreme values
+    return ((array - array_min) / (array_max - array_min) * 255).astype(np.uint8)
 # -----------------------------------------------------------------------------
 #                         show_single_result
 # -----------------------------------------------------------------------------
-def show_single_result(image_data, is_ndvi=False, title=None):
+def show_single_result(image_data, colormap, is_ndvi=False, title=None):
     '''
     image_data - a single image file response from openeo
     is_ndvi    - set this to true if you have done NDVI calculations
@@ -43,24 +47,23 @@ def show_single_result(image_data, is_ndvi=False, title=None):
     if not image_data:
         print("No image data available.")
         return
-    
+    # Check if the dataset is empty or has valid data
     filelike = io.BytesIO(image_data)
     im = rasterio.open(filelike)
-    
-    # Check if the dataset is empty or has valid data
     if im.count == 0:
         print("The dataset is empty.")
         return
-    
-    fig, ax = plt.subplots()
-    if is_ndvi:
-        rasterio.plot.show(im, ax=ax, cmap='RdYlGn', vmin=-0.8, vmax=0.8)
-    else:
-        rasterio.plot.show(im, ax=ax, cmap="gray")  # Changed to grayscale for better visibility
-    
-    # Set title if not provided
-    title = title or f'Created: {im.tags().get("datetime_from_dim", "Unknown Date")}'
-    plt.title(title)
+    for i in range(1, im.count + 1):
+        fig, ax = plt.subplots(figsize=(12,12))
+        b = im.read(i)
+        b_norm = normalize(b)   
+        if is_ndvi:
+            rasterio.plot.show(b_norm, ax=ax, cmap='RdYlGn', vmin=-0.8, vmax=0.8)
+        else:
+            rasterio.plot.show(b_norm, ax=ax, cmap=colormap)      
+        #Set title if not provided
+        title = title or f'Created: {im.tags().get("datetime_from_dim", "Unknown Date")}'
+        plt.title(title)
     
     return [im]
 # -----------------------------------------------------------------------------
@@ -128,15 +131,15 @@ def show_zipped_results(image_data, is_ndvi=False,title=None):
                     rres = rasterio.plot.show(src.read(1), transform=src.transform, ax=ax, cmap=cmap, vmin=0, vmax = 2)
                     im = rres.get_images()[0]
                     fig.colorbar(im, ax=ax, shrink=0.35, aspect=10)
-                title = title or f'Created:{im.tags()["datetime_from_dim"]}'
+                title = title or f'Created:{src.tags()["datetime_from_dim"]}'
                 ax.set_title(title)
         return images
 # -----------------------------------------------------------------------------
 #                               show_result
 # -----------------------------------------------------------------------------
-def show_result(image_data, is_ndvi=False, title=None):
+def show_result(image_data, colormap='viridis', is_ndvi=False, title=None):
     try:
-        return show_single_result(image_data, is_ndvi,title)
+        return show_single_result(image_data, colormap, is_ndvi, title)
     except Exception as e:
         pass
     return show_zipped_results(image_data, is_ndvi,title)
