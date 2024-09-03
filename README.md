@@ -12,7 +12,7 @@ The community repo is shared and monitored by developers, stakeholders and regul
 
 ## Running a Notebook Server Without Cloning the Repo
 
-If you want to quickly check out the tutorials without saving any changes or downloading the files locally, you can run the notebook server directly from the Docker image. This is a great option if you’re just exploring and don’t need to save your work.
+If you want to quickly check out the tutorials without saving any changes or downloading the files locally, you can run the notebook server directly from the Docker image. This is a great option if you’re just exploring and don’t need to save your work. If you do not have Docker installed or know how to use it check out [https://docs.docker.com/desktop/](https://docs.docker.com/desktop/)
 
 ### How to Run
 
