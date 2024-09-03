@@ -17,8 +17,8 @@ If you want to quickly check out the tutorials without saving any changes or dow
 ### How to Run
 
 1. Open your terminal or command prompt.
-2. Run the following Docker command:
-
+2. Run the following Docker commands:
+   `docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest`
    `docker run --rm -it -p 8888:8888 harbor.main.rise-ck8s.com/des-public/tutorials:latest`
 
 4. Open Firefox (or your preferred browser) and navigate to the URL provided in the terminal output to access the Jupyter Lab interface.
