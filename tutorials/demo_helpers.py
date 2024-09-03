@@ -13,7 +13,6 @@ from io import BytesIO
 
 import xarray as xr
 from io import BytesIO
- 
 # -----------------------------------------------------------------------------
 #                               showfig
 # -----------------------------------------------------------------------------
@@ -35,6 +34,8 @@ def normalize(array):
     return ((array - array_min) / (array_max - array_min) * 255).astype(np.uint8)
 # -----------------------------------------------------------------------------
 #                         show_single_result
+#
+# Visualizes every band of a single Geotiff result from OpenEO as a separate image
 # -----------------------------------------------------------------------------
 def show_single_result(image_data, colormap, is_ndvi=False, title=None):
     '''
@@ -58,7 +59,7 @@ def show_single_result(image_data, colormap, is_ndvi=False, title=None):
         b = im.read(i)
         b_norm = normalize(b)   
         if is_ndvi:
-            rasterio.plot.show(b_norm, ax=ax, cmap='RdYlGn', vmin=-0.8, vmax=0.8)
+            rasterio.plot.show(b_norm, ax=ax, cmap='RdYlGn')
         else:
             rasterio.plot.show(b_norm, ax=ax, cmap=colormap)      
         #Set title if not provided
@@ -68,8 +69,11 @@ def show_single_result(image_data, colormap, is_ndvi=False, title=None):
     return [im]
 # -----------------------------------------------------------------------------
 #                           show_zipped_results
+# Visualizes each result of multiple zipped Geotiffs from OpenEO in a single plot. 
+# The first band of each result is visualized as a subplot.
+#
 # -----------------------------------------------------------------------------
-def show_zipped_results(image_data, is_ndvi=False,title=None):
+def show_zipped_results(image_data, colormap, is_ndvi=False,title=None):
     '''
     image_data - a single image file response from openeo
     is_ndvi    - set this to true if you have done NDVI calculations
@@ -111,9 +115,7 @@ def show_zipped_results(image_data, is_ndvi=False,title=None):
             rows = len(ifnames) // columns + (len(ifnames) % columns > 0)
 
             # Create subplots
-            fig, axs = plt.subplots(rows, columns)
-
-                                        
+            fig, axs = plt.subplots(rows, columns, figsize=(12,12))
             for idx, ifname in enumerate(ifnames):
                 fname = f"{tmpdirname}/{ifname}"
                 src = rasterio.open(fname)
@@ -124,11 +126,10 @@ def show_zipped_results(image_data, is_ndvi=False,title=None):
                     ax = axs[idx]
 
                 if is_ndvi:
-                    rasterio.plot.show(src, ax=ax, cmap='RdYlGn',vmin=-0.8,vmax=0.8)
+                    rasterio.plot.show(src, ax=ax, cmap='RdYlGn')
                 else:
-                    cmap = plt.cm.inferno  
-                    cmap.set_bad('black', 1.0) 
-                    rres = rasterio.plot.show(src.read(1), transform=src.transform, ax=ax, cmap=cmap, vmin=0, vmax = 2)
+                    src_norm = normalize(src.read(1))
+                    rres = rasterio.plot.show(src_norm, transform=src.transform, ax=ax, cmap=colormap)
                     im = rres.get_images()[0]
                     fig.colorbar(im, ax=ax, shrink=0.35, aspect=10)
                 title = title or f'Created:{src.tags()["datetime_from_dim"]}'
@@ -142,7 +143,7 @@ def show_result(image_data, colormap='viridis', is_ndvi=False, title=None):
         return show_single_result(image_data, colormap, is_ndvi, title)
     except Exception as e:
         pass
-    return show_zipped_results(image_data, is_ndvi,title)
+    return show_zipped_results(image_data, colormap, is_ndvi, title)
 
 # -----------------------------------------------------------------------------
 #                               get_s3_wqsf_flags
