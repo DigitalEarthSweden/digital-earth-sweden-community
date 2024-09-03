@@ -34,4 +34,4 @@ start-notebook: build
 	@echo "             NOTE that the container SHARES your files on your HDD now          "
 	@echo "             under the folder ./proj "
 	@echo "=============================================================================== "
- 	docker run --rm -it -p 8888:8888 --name eo-training --mount type=bind,source=$(shell pwd),target=/proj $(IMAGE_NAME):$(IMAGE_TAG)
+	docker run --rm -it -p 8888:8888 --name eo-training --mount type=bind,source=$(shell pwd),target=/proj $(IMAGE_NAME):$(IMAGE_TAG)
