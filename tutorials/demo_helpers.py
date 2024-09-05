@@ -11,8 +11,6 @@ import xarray as xr
 import numpy as np
 from io import BytesIO
 
-import xarray as xr
-from io import BytesIO
 # -----------------------------------------------------------------------------
 #                               showfig
 # -----------------------------------------------------------------------------
