@@ -61,7 +61,7 @@ def show_single_result(image_data, colormap, is_ndvi=False, title=None):
         else:
             rasterio.plot.show(b_norm, ax=ax, cmap=colormap)      
         #Set title if not provided
-        title = title or f'Created: {im.tags().get("datetime_from_dim", "Unknown Date")}'
+        title = title or f'Band index {i}, Created: {im.tags().get("datetime_from_dim", "Unknown Date")}'
         plt.title(title)
     
     return [im]
