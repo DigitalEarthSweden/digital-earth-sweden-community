@@ -5,6 +5,7 @@ on:
     inputs:
       image_tag:
         required: true
+        type: string   
 
 jobs:
   test:
