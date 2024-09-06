@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Main CI Pipeline
 
 on:
   push:
@@ -9,14 +9,17 @@ on:
       - main
 
 jobs:
-
   build:
     uses: ./.github/workflows/build.yml
 
   test:
     needs: build
     uses: ./.github/workflows/test.yml
+    with:
+      image_tag: ${{ needs.build.outputs.image_tag }}
 
   deploy:
     needs: test
     uses: ./.github/workflows/deploy.yml
+    with:
+      image_tag: ${{ needs.build.outputs.image_tag }}
