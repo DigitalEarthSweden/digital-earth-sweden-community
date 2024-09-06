@@ -1,0 +1,21 @@
+name: Test Docker Image
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Pull Docker image
+      run: docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest
+
+    - name: Run tests inside Docker container
+      run: |
+        docker run --rm \
+          harbor.main.rise-ck8s.com/des-public/tutorials:latest \
+          pytest tests/
+

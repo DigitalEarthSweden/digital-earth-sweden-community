@@ -1,0 +1,84 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# IPython/Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Jupyter Notebook metadata
+*.nbconvert.ipynb
+
+# Ignore virtual environment directories
+env/
+venv/
+.venv/
+
+# VS Code and other editor directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# PyCharm
+*.iml
+*.iws
+.idea/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Docker
+*.env
+*.envrc
+.docker/
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.test.yml
+Dockerfile.local
+Dockerfile.test
+
+# Ignore the output of build scripts
+target/
+out/
+build/
+
+# Ignore temporary files and directories
+tmp/
+temp/
+*.tmp
+*.temp
+*.swp
+*~
+.DS_Store
+
+# Ignore Jupyter Notebook outputs
+*.checkpoint.ipynb
+.ipynb_checkpoints/
+
+# Ignore own  data
+data/
+

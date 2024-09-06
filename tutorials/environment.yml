@@ -40,4 +40,4 @@ dependencies:
     - openeo
     - rioxarray  # for rasterio xarray extensions, optional but useful for geospatial data
     - nc-time-axis  # for plotting cftime.datetime objects with matplotlib
-
+    - testbook
