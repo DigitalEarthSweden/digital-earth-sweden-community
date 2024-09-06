@@ -4,20 +4,23 @@ on:
   workflow_run:
     workflows: ["Build and Publish Docker Image"]
     types:
-      - completed  # Trigger only when the build is completed
-
-concurrency:
-  group: test-notebooks-${{ github.ref }}  # Ensure test jobs for the same ref are not duplicated
-  cancel-in-progress: true  # Cancel old tests when a new push is made
+      - completed
 
 jobs:
   test:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    concurrency:
+      group: test-notebooks-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Log in to Docker registry
         env:
@@ -26,7 +29,10 @@ jobs:
         run: |
           echo "$DOCKER_PASSWORD" | docker login harbor.main.rise-ck8s.com -u "$DOCKER_USER" --password-stdin
 
-      - name: Run notebook tests
+      - name: Pull Docker image
         run: |
           docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest
-          docker run --rm harbor.main.rise-ck8s.com/des-public/tutorials:latest pytest --disable-warnings tests/test_notebooks.py
+
+      - name: Run notebook tests
+        run: |
+          docker run --rm harbor.main.rise-ck8s.com/des-public/tutorials:latest ./start_tests.sh

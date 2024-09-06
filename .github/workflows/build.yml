@@ -3,15 +3,19 @@ name: Build and Publish Docker Image
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - '**'  # Trigger on push to any branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests targeting main
 
 concurrency:
-  group: build-and-publish-${{ github.ref }}  # Ensure jobs from the same ref (branch) cancel previous ones
-  cancel-in-progress: true  # Cancel any in-progress jobs when a new one starts
+  group: build-${{ github.ref }}  # Cancel in-progress builds from the same branch
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # Max time to run before failure
 
     steps:
       - name: Checkout code
@@ -31,10 +35,9 @@ jobs:
           echo "$DOCKER_PASSWORD" | docker login harbor.main.rise-ck8s.com -u "$DOCKER_USER" --password-stdin
 
       - name: Build and push Docker image
-        id: build_and_push
         run: |
-          docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:latest ./tutorials
+          docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:latest .  # Build from root
           docker push harbor.main.rise-ck8s.com/des-public/tutorials:latest
 
       - name: Image digest
-        run: echo "Image digest: ${{ steps.build_and_push.outputs.digest }}"
+        run: echo ${{ steps.docker_meta.outputs.digest }}
