@@ -1,16 +1,12 @@
 name: Test Notebooks
 
 on:
-  workflow_run:
-    workflows: ["Build and Publish Docker Image"]
-    types:
-      - completed
+  workflow_call:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    
+
     concurrency:
       group: test-notebooks-${{ github.ref }}
       cancel-in-progress: true
@@ -29,10 +25,13 @@ jobs:
         run: |
           echo "$DOCKER_PASSWORD" | docker login harbor.main.rise-ck8s.com -u "$DOCKER_USER" --password-stdin
 
-      - name: Pull Docker image
+      - name: Pull Docker image for testing
         run: |
-          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest
+          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ needs.build.outputs.image_tag }}
 
-      - name: Run notebook tests
+      - name: Run notebook tests using start_tests.sh
+        env:
+          DES_DOCKER_IMAGE: harbor.main.rise-ck8s.com/des-public/tutorials:${{ needs.build.outputs.image_tag }}
         run: |
-          docker run --rm harbor.main.rise-ck8s.com/des-public/tutorials:latest ./start_tests.sh
+          chmod +x ./start_tests.sh
+          ./start_tests.sh

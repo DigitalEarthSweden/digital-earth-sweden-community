@@ -1,21 +1,19 @@
-name: Build and Publish Docker Image
+name: Build Docker Image
 
 on:
-  push:
-    branches:
-      - '**'  # Trigger on push to any branch
-  pull_request:
-    branches:
-      - main  # Trigger on pull requests targeting main
-
-concurrency:
-  group: build-${{ github.ref }}  # Cancel in-progress builds from the same branch
-  cancel-in-progress: true
+  workflow_call:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # Max time to run before failure
+    timeout-minutes: 15
+
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
+
+    outputs:
+      image_tag: ${{ steps.set_output.outputs.image_tag }}
 
     steps:
       - name: Checkout code
@@ -27,17 +25,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Docker registry
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          echo "$DOCKER_PASSWORD" | docker login harbor.main.rise-ck8s.com -u "$DOCKER_USER" --password-stdin
+      - name: Generate image tag
+        id: set_output
+        run: echo "::set-output name=image_tag::${{ github.sha }}"  # Use Git SHA as unique tag
 
-      - name: Build and push Docker image
+      - name: Build Docker image
         run: |
-          docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:latest .  # Build from root
-          docker push harbor.main.rise-ck8s.com/des-public/tutorials:latest
+          docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} .
 
-      - name: Image digest
-        run: echo ${{ steps.docker_meta.outputs.digest }}
+      - name: Upload Docker image
+        run: |
+          docker push harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}
