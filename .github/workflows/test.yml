@@ -2,10 +2,14 @@ name: Test Notebooks
 
 on:
   workflow_call:
+    inputs:
+      image_tag:
+        required: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     concurrency:
       group: test-notebooks-${{ github.ref }}
@@ -25,13 +29,11 @@ jobs:
         run: |
           echo "$DOCKER_PASSWORD" | docker login harbor.main.rise-ck8s.com -u "$DOCKER_USER" --password-stdin
 
-      - name: Pull Docker image for testing
+      - name: Pull Docker image
         run: |
-          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ needs.build.outputs.image_tag }}
+          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }}
 
       - name: Run notebook tests using start_tests.sh
-        env:
-          DES_DOCKER_IMAGE: harbor.main.rise-ck8s.com/des-public/tutorials:${{ needs.build.outputs.image_tag }}
         run: |
           chmod +x ./start_tests.sh
-          ./start_tests.sh
+          DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }}" ./start_tests.sh

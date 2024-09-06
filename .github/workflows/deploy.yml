@@ -1,15 +1,14 @@
-name: Deploy to Harbor
+name: Deploy Docker Image
 
 on:
   workflow_call:
+    inputs:
+      image_tag:
+        required: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
-    concurrency:
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: true
 
     steps:
       - name: Log in to Docker registry
@@ -19,7 +18,7 @@ jobs:
         run: |
           echo "$DOCKER_PASSWORD" | docker login harbor.main.rise-ck8s.com -u "$DOCKER_USER" --password-stdin
 
-      - name: Tag and push Docker image as latest
+      - name: Tag Docker image as "latest" and push
         run: |
-          docker tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ needs.build.outputs.image_tag }} harbor.main.rise-ck8s.com/des-public/tutorials:latest
+          docker tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }} harbor.main.rise-ck8s.com/des-public/tutorials:latest
           docker push harbor.main.rise-ck8s.com/des-public/tutorials:latest
