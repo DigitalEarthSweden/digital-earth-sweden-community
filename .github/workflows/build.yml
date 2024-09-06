@@ -5,6 +5,10 @@ on:
     branches:
       - main  # Trigger on push to the main branch
 
+concurrency:
+  group: build-and-publish-${{ github.ref }}  # Ensure jobs from the same ref (branch) cancel previous ones
+  cancel-in-progress: true  # Cancel any in-progress jobs when a new one starts
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,9 +31,10 @@ jobs:
           echo "$DOCKER_PASSWORD" | docker login harbor.main.rise-ck8s.com -u "$DOCKER_USER" --password-stdin
 
       - name: Build and push Docker image
+        id: build_and_push
         run: |
           docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:latest ./tutorials
           docker push harbor.main.rise-ck8s.com/des-public/tutorials:latest
 
       - name: Image digest
-        run: echo ${{ steps.docker_meta.outputs.digest }}
+        run: echo "Image digest: ${{ steps.build_and_push.outputs.digest }}"
