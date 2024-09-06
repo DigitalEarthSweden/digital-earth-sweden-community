@@ -11,6 +11,7 @@ import xarray as xr
 import numpy as np
 from io import BytesIO
 
+
 # -----------------------------------------------------------------------------
 #                               showfig
 # -----------------------------------------------------------------------------
@@ -27,21 +28,22 @@ def showfig(data,flag = None,figsize=(5,5),ax=None):
         
 # Normalize the data to the range 0-255 for display
 def normalize(array):
-    array_min, array_max = np.percentile(array, (1, 99))  # Clip values between 1st and 99th percentile
+    array_min, array_max = np.nanpercentile(array, (1, 99))  # Clip values between 1st and 99th percentile
     array = np.clip(array, array_min, array_max)  # Clip the extreme values
     return ((array - array_min) / (array_max - array_min) * 255).astype(np.uint8)
+
 # -----------------------------------------------------------------------------
 #                         show_single_result
 #
 # Visualizes every band of a single Geotiff result from OpenEO as a separate image
 # -----------------------------------------------------------------------------
-def show_single_result(image_data, colormap, is_ndvi=False, title=None):
+def show_single_result(image_data, colormap, is_ndvi, title, norm):
     '''
     image_data - a single image file response from openeo
     is_ndvi    - set this to true if you have done NDVI calculations
                  (sets a nicer color map)
     '''
-    
+    title_provided = True if title else False
     # Check if the image data is empty
     if not image_data:
         print("No image data available.")
@@ -54,14 +56,19 @@ def show_single_result(image_data, colormap, is_ndvi=False, title=None):
         return
     for i in range(1, im.count + 1):
         fig, ax = plt.subplots(figsize=(12,12))
-        b = im.read(i)
-        b_norm = normalize(b)   
+        band = im.read(i, masked=True)
+        b_norm = normalize(band.data) if norm else band
+        band.data[:] = b_norm
+        band.data[band.mask == True] = np.nan
         if is_ndvi:
-            rasterio.plot.show(b_norm, ax=ax, cmap='RdYlGn')
+            rasterio.plot.show(band.data, ax=ax, cmap='RdYlGn')
         else:
-            rasterio.plot.show(b_norm, ax=ax, cmap=colormap)      
+            rasterio.plot.show(band.data, ax=ax, cmap=colormap, extent=[im.bounds.left,im.bounds.right, im.bounds.bottom, im.bounds.top])
         #Set title if not provided
-        title = title or f'Band index {i}, Created: {im.tags().get("datetime_from_dim", "Unknown Date")}'
+        if title_provided:
+            title = title
+        else:
+            title = f'Band index {i}, Created: {im.tags().get("datetime_from_dim", "Unknown Date")}'
         plt.title(title)
     
     return [im]
@@ -113,7 +120,7 @@ def show_zipped_results(image_data, colormap, is_ndvi=False,title=None):
             rows = len(ifnames) // columns + (len(ifnames) % columns > 0)
 
             # Create subplots
-            fig, axs = plt.subplots(rows, columns, figsize=(12,12))
+            fig, axs = plt.subplots(rows, columns, figsize=(12,12)) 
             for idx, ifname in enumerate(ifnames):
                 fname = f"{tmpdirname}/{ifname}"
                 src = rasterio.open(fname)
@@ -136,9 +143,9 @@ def show_zipped_results(image_data, colormap, is_ndvi=False,title=None):
 # -----------------------------------------------------------------------------
 #                               show_result
 # -----------------------------------------------------------------------------
-def show_result(image_data, colormap='viridis', is_ndvi=False, title=None):
+def show_result(image_data, colormap='viridis', is_ndvi=False, title=None, norm=True):
     try:
-        return show_single_result(image_data, colormap, is_ndvi, title)
+        return show_single_result(image_data, colormap, is_ndvi, title, norm)
     except Exception as e:
         pass
     return show_zipped_results(image_data, colormap, is_ndvi, title)

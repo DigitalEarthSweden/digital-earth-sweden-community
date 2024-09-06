@@ -2,7 +2,7 @@
 #
 # conda env create --file environment.yml
 
-name: openeo-training
+name: des-community
 
 channels:
   - conda-forge
@@ -36,6 +36,7 @@ dependencies:
   - seaborn  # for better color palettes in plots
   - icecream # for nicer debug printouts
   - descartes # plot polygons with holes
+  - numpy>=1.9
   - pip:
     - openeo
     - rioxarray  # for rasterio xarray extensions, optional but useful for geospatial data
