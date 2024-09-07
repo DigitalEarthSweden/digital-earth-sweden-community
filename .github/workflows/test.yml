@@ -19,7 +19,9 @@ jobs:
 
     steps:
       - name: Print image tag before test
-        run: echo "Image Tag: ${{ needs.build.outputs.image_tag }}"
+        run: |
+          echo "Image Tag: ${{ inputs.image_tag }}"
+
       
       - name: Log in to Docker registry
         run: |

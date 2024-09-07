@@ -29,7 +29,8 @@ jobs:
         run: echo "::set-output name=image_tag::${{ github.sha }}"
 
       - name: Print image tag
-        run: echo "Candidate Image Tag: ${{ github.sha }}"
+        run: |
+          echo "Candidate Image Tag: ${{ github.sha }}"
         
       - name: Build Docker image
         run: |
