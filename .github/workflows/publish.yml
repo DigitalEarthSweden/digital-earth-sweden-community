@@ -2,10 +2,6 @@ name: Publish Docker Image
 
 on:
   workflow_call:
-    inputs:
-      image_tag:
-        required: true
-        type: string
     secrets:
       DOCKER_USERNAME:
         required: true
@@ -20,7 +16,7 @@ jobs:
 
       - name: Print image tag before test
         run: |
-          echo "Image Tag: ${{ inputs.image_tag }}"
+          echo "Image Tag: ${{ github.sha }}"
 
       - name: Log in to Docker registry
         run: |
@@ -28,5 +24,5 @@ jobs:
 
       - name: Tag Docker image as "latest" and push
         run: |
-          docker tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }} harbor.main.rise-ck8s.com/des-public/tutorials:latest
+          docker tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} harbor.main.rise-ck8s.com/des-public/tutorials:latest
           docker push harbor.main.rise-ck8s.com/des-public/tutorials:latest

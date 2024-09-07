@@ -2,10 +2,6 @@ name: Test Notebooks
 
 on:
   workflow_call:
-    inputs:
-      image_tag:
-        required: true
-        type: string
     secrets:
       DOCKER_USERNAME:
         required: true
