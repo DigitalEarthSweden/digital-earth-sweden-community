@@ -18,6 +18,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      - name: Print image tag
+        run: |
+          echo "Candidate Image Tag: ${{ github.sha }}"
+
       - name: Print image tag before test
         run: |
           echo "Image Tag: ${{ inputs.image_tag }}"
