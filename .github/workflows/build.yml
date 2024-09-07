@@ -2,44 +2,29 @@ name: Build Docker Image
 
 on:
   workflow_call:
-    inputs:
-      docker_username:
+    secrets:
+      DOCKER_USERNAME:
         required: true
-        type: string
-      docker_password:
+      DOCKER_PASSWORD:
         required: true
-        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    concurrency:
-      group: build-${{ github.ref }}
-      cancel-in-progress: true
-
-    outputs:
-      image_tag: ${{ steps.set_output.outputs.image_tag }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Log in to Docker registry
         run: |
-          echo "${{ inputs.docker_password }}" | docker login harbor.main.rise-ck8s.com -u "${{ inputs.docker_username }}" --password-stdin
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Generate image tag
-        id: set_output
-        run: echo "::set-output name=image_tag::${{ github.sha }}"  # Output Git SHA as the image tag
-
+      - name: Print image tag
+        run: |
+          echo "Candidate Image Tag: ${{ github.sha }}"
+        
       - name: Build Docker image
         run: |
           docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} .
