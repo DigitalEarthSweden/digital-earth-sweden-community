@@ -18,8 +18,6 @@ jobs:
   test:
     needs: build
     uses: ./.github/workflows/test.yml
-    with:
-      image_tag: ${{ needs.build.outputs.image_tag }}
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -28,8 +26,6 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/publish.yml
-    with:
-      image_tag: ${{ needs.build.outputs.image_tag }}
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

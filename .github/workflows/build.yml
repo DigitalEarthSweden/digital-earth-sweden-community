@@ -13,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    outputs:
-      image_tag: ${{ steps.set_output.outputs.image_tag }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,10 +20,6 @@ jobs:
       - name: Log in to Docker registry
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Generate image tag
-        id: set_output
-        run: echo "::set-output name=image_tag::${{ github.sha }}"
 
       - name: Print image tag
         run: |

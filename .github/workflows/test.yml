@@ -15,17 +15,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Print image tag
         run: |
           echo "Candidate Image Tag: ${{ github.sha }}"
-
-      - name: Print image tag before test
-        run: |
-          echo "Image Tag: ${{ inputs.image_tag }}"
-
       
       - name: Log in to Docker registry
         run: |
@@ -33,9 +28,9 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }}
+          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha  }}
 
       - name: Run notebook tests
         run: |
           chmod +x ./start_tests.sh
-          DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }}" ./start_tests.sh
+          DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha  }}" ./start_tests.sh
