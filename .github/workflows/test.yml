@@ -14,19 +14,31 @@ jobs:
     timeout-minutes: 15
 
     steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set image_tag variable
+        run: |
+          if [[ "${{ needs.build.result }}" == "success" ]]; then
+            echo "image_tag=${{ github.sha }}" >> $GITHUB_ENV
+          else
+            echo "image_tag=latest" >> $GITHUB_ENV
+          fi
+    
       - name: Print image tag
         run: |
-          echo "Candidate Image Tag: ${{ github.sha }}"
-      
+          echo "Test Using Image Tag: ${{ env.image_tag }}"
+   
       - name: Log in to Docker registry
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Pull Docker image
         run: |
-          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha  }}
+          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ env.image_tag }}
 
       - name: Run notebook tests
         run: |
           chmod +x ./start_tests.sh
-          DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha  }}" ./start_tests.sh
+          DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ env.image_tag }}" ./start_tests.sh
