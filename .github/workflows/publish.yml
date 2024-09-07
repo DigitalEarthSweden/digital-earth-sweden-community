@@ -1,4 +1,4 @@
-name: Deploy Docker Image
+name: Publish Docker Image
 
 on:
   workflow_call:
@@ -8,7 +8,7 @@ on:
         type: string  
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
 
     steps:

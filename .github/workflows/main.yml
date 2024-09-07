@@ -11,15 +11,25 @@ on:
 jobs:
   build:
     uses: ./.github/workflows/build.yml
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   test:
     needs: build
     uses: ./.github/workflows/test.yml
     with:
       image_tag: ${{ needs.build.outputs.image_tag }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-  deploy:
+  publish:
     needs: test
-    uses: ./.github/workflows/deploy.yml
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/publish.yml
     with:
       image_tag: ${{ needs.build.outputs.image_tag }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
