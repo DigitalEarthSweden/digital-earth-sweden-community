@@ -6,38 +6,27 @@ on:
       image_tag:
         required: true
         type: string
-      docker_username:
+    secrets:
+      DOCKER_USERNAME:
         required: true
-        type: string
-      docker_password:
+      DOCKER_PASSWORD:
         required: true
-        type: string
 
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    concurrency:
-      group: test-notebooks-${{ github.ref }}
-      cancel-in-progress: true
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Log in to Docker registry
         run: |
-          echo "${{ inputs.docker_password }}" | docker login harbor.main.rise-ck8s.com -u "${{ inputs.docker_username }}" --password-stdin
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Pull Docker image
         run: |
           docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }}
 
-      - name: Run notebook tests using start_tests.sh
+      - name: Run notebook tests
         run: |
           chmod +x ./start_tests.sh
           DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ inputs.image_tag }}" ./start_tests.sh

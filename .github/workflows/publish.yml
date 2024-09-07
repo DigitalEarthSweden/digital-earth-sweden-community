@@ -6,12 +6,11 @@ on:
       image_tag:
         required: true
         type: string
-      docker_username:
+    secrets:
+      DOCKER_USERNAME:
         required: true
-        type: string
-      docker_password:
+      DOCKER_PASSWORD:
         required: true
-        type: string
 
 jobs:
   publish:
@@ -20,7 +19,7 @@ jobs:
     steps:
       - name: Log in to Docker registry
         run: |
-          echo "${{ inputs.docker_password }}" | docker login harbor.main.rise-ck8s.com -u "${{ inputs.docker_username }}" --password-stdin
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Tag Docker image as "latest" and push
         run: |
