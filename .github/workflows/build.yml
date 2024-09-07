@@ -28,6 +28,9 @@ jobs:
         id: set_output
         run: echo "::set-output name=image_tag::${{ github.sha }}"
 
+      - name: Print image tag
+        run: echo "Candidate Image Tag: ${{ github.sha }}"
+        
       - name: Build Docker image
         run: |
           docker build -t harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} .
