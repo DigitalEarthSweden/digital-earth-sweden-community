@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '--do-build')
     uses: ./.github/workflows/build.yml
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
