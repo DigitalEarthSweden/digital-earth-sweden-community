@@ -17,7 +17,7 @@ from testbook import testbook
         "050_PROC_010-Processes-intro.ipynb",
         "050_PROC_020-Operators.ipynb",
         "060_EO_020-Reductions.ipynb",
-        "060_EO_020-Spatial-Filtering.ipynb",
+        "060_EO_030-Spatial-Filtering.ipynb",
     ],
 )
 def test_test_environment_setup(bookname):
