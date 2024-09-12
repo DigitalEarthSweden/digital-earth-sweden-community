@@ -20,6 +20,7 @@ jobs:
 
       - name: Set image_tag variable
         run: |
+          echo "${{ needs.build.result }}";
           if [[ "${{ needs.build.result }}" == "success" ]]; then
             echo "image_tag=${{ github.sha }}" >> $GITHUB_ENV
           else
