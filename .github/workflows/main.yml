@@ -9,10 +9,10 @@ on:
       - main
 
 jobs:
-  build:
+  build_candidate:
     if: github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '--do-build')
     concurrency:
-      group: build-${{ github.ref }}
+      group: build_candidate:-${{ github.ref }}
       cancel-in-progress: true
     uses: ./.github/workflows/build.yml
     secrets:
@@ -20,7 +20,7 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   test:
-    needs: build
+    needs: build_candidate
     concurrency:
       group: test-${{ github.ref }}
       cancel-in-progress: true

@@ -20,8 +20,9 @@ jobs:
 
       - name: Set image_tag variable
         run: |
-          echo "${{ needs.build.result }}";
-          if [[ "${{ needs.build.result }}" == "success" ]]; then
+          echo "Checking produced variable ${{ needs.build_candidate.outputs.has_run }}";
+          echo "Checking if build stage ran: ${{ needs.build_candidate.result }}";
+          if [[ "${{ needs.build_candidate.result }}" == "success" ]]; then
             echo "image_tag=${{ github.sha }}" >> $GITHUB_ENV
           else
             echo "image_tag=latest" >> $GITHUB_ENV
