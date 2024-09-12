@@ -21,15 +21,12 @@ jobs:
       - name: Set image_tag variable
         run: |
           echo "Checking if build stage ran: ${{ env.has_run }}";
-          if [[ "${{ env.has_run }}" == "true" ]]; then
+          if [ "${{ env.has_run }}" == "true" ]; then
             echo "image_tag=${{ github.sha }}" >> $GITHUB_ENV
           else
             echo "image_tag=latest" >> $GITHUB_ENV
           fi
-          - name: Print image tag
-            run: |
-              echo "Test Using Image Tag: ${{ env.image_tag }}"
-   
+    
       - name: Log in to Docker registry
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
