@@ -22,11 +22,14 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Pull Docker image
+      - name: Set image_tag based on available image
         run: |
-          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} || docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest
-        
-
+            if docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}; then
+              echo "image_tag=${{ github.sha }}" >> $GITHUB_ENV
+            else
+              docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest
+              echo "image_tag=latest" >> $GITHUB_ENV
+            fi
       - name: Run notebook tests
         run: |
           chmod +x ./start_tests.sh
