@@ -49,4 +49,4 @@ WORKDIR /proj
 EXPOSE 8888
 
 # Set the entry point to automatically start Jupyter Lab
-ENTRYPOINT ["bash", "-c", "source activate openeo-training && jupyter lab --port=8888 --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/proj --no-browser"]
+CMD ["bash", "-c", "source activate openeo-training && jupyter lab --port=8888 --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/proj --no-browser"]
