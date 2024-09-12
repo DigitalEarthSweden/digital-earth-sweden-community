@@ -17,15 +17,6 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Set image_tag variable
-        run: |
-          echo "Checking if build stage ran: ${{ env.has_run }}";
-          if [ "${{ env.has_run }}" == "true" ]; then
-            echo "image_tag=${{ github.sha }}" >> $GITHUB_ENV
-          else
-            echo "image_tag=latest" >> $GITHUB_ENV
-          fi
     
       - name: Log in to Docker registry
         run: |
@@ -33,7 +24,8 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ env.image_tag }}
+          docker pull harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} || docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest
+        
 
       - name: Run notebook tests
         run: |

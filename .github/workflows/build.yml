@@ -39,7 +39,3 @@ jobs:
       - name: Upload Docker image
         run: |
           docker push harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}
-
-      - name: Set build has_run flag
-        id: has_run_build
-        run: echo "has_run=true" >> $GITHUB_ENV
