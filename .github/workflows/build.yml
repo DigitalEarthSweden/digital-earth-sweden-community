@@ -13,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     
-    outputs:
-      has_run: ${{ steps.has_run_build.outputs.has_run }}
 
     steps:
       - name: Checkout code
@@ -44,4 +42,4 @@ jobs:
 
       - name: Set build has_run flag
         id: has_run_build
-        run: echo "::set-output name=has_run::true"
+        run: echo "has_run=true" >> $GITHUB_ENV
