@@ -89,7 +89,7 @@ If you prefer to work in your local environment without Docker, you can set up t
 
    Activate the environment:
 
-   `conda activate openeo-training`
+   `conda activate des-community`
 
 4. **Run Jupyter Lab**:
 

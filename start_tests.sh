@@ -23,7 +23,7 @@ if ! docker ps | grep -q $CONTAINER_NAME; then
 fi
 
 # Run pytest inside the container and capture the result
-docker exec $CONTAINER_NAME bash -c "source activate openeo-training && pytest --disable-warnings /test/test_notebooks.py"
+docker exec $CONTAINER_NAME bash -c "source activate des-community && pytest --disable-warnings /test/test_notebooks.py"
 TEST_RESULT=$?
 
 # Stop and remove the container
