@@ -37,3 +37,4 @@ def test_test_environment_setup(bookname):
     # Load the notebook using testbook
     with testbook(notebook_path, execute=False, timeout=-1) as tb:
         assert tb  # Ensures the notebook is properly loaded
+        tb.execute()

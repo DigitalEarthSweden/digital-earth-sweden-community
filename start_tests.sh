@@ -5,6 +5,8 @@ DES_DOCKER_IMAGE=${DES_DOCKER_IMAGE:-"harbor.main.rise-ck8s.com/des-public/tutor
 CONTAINER_NAME="des_notebooks"
 JUPYTER_PORT=9999  # Changed to 9999 to avoid conflicts
 
+echo "Running tests in $DES_DOCKER_IMAGE"
+
 # Clean up any previous runs
 docker stop $CONTAINER_NAME 2>/dev/null || true
 docker rm $CONTAINER_NAME 2>/dev/null || true

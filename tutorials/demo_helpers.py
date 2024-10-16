@@ -25,7 +25,7 @@ def showfig(data,flag = None,figsize=(5,5),ax=None):
     plt.imshow(img)
     if colorbar:
         plt.colorbar()
-        
+
 # Normalize the data to the range 0-255 for display
 def normalize(array):
     array_min, array_max = np.nanpercentile(array, (1, 99))  # Clip values between 1st and 99th percentile
@@ -74,7 +74,7 @@ def show_single_result(image_data, colormap, is_ndvi, title, norm):
     return [im]
 # -----------------------------------------------------------------------------
 #                           show_zipped_results
-# Visualizes each result of multiple zipped Geotiffs from OpenEO in a single plot. 
+# Visualizes each result of multiple zipped Geotiffs from OpenEO in a single plot.
 # The first band of each result is visualized as a subplot.
 #
 # -----------------------------------------------------------------------------
@@ -96,24 +96,22 @@ def show_zipped_results(image_data, colormap, is_ndvi=False,title=None):
     '''
     images = []
     file_like_object = io.BytesIO(image_data)
-    
+
     with tempfile.TemporaryDirectory() as tmpdirname:
 
         # Step 2: Open the tar.gz file
         with tarfile.open(fileobj=file_like_object, mode="r:gz") as tar:
             # Step 3: Extract all the contents into a specific directory
             tar.extractall(tmpdirname)
-            
+
             if os.path.isdir(tmpdirname):
                 tmpdirname = f"{tmpdirname}/{os.listdir(tmpdirname)[0]}"
-                
-            
-            
+
             image_types = [".tif"]
 
             ifnames = [ifname for ifname in sorted(os.listdir(tmpdirname))
                        if  any(image_type in ifname for image_type in image_types)]
-            
+
             columns = 2  # For example, adjust based on your preference and screen size
 
             # Calculate the required number of rows to fit all images
@@ -137,7 +135,7 @@ def show_zipped_results(image_data, colormap, is_ndvi=False,title=None):
                     rres = rasterio.plot.show(src_norm, transform=src.transform, ax=ax, cmap=colormap)
                     im = rres.get_images()[0]
                     fig.colorbar(im, ax=ax, shrink=0.35, aspect=10)
-                title = title or f'Created:{src.tags()["datetime_from_dim"]}'
+                title = title or f'Created:{src.tags()["timestamp"]}'
                 ax.set_title(title)
         return images
 # -----------------------------------------------------------------------------
@@ -435,4 +433,3 @@ def show_binary_image_thumbnail(image_list: list[rio.DatasetReader], title=None,
     """
     array = image_list[index].read(band)  # Read the specified band from the selected image
     show_binary_array_thumbnail(array, title)  # Display the binary thumbnail of the array
-
