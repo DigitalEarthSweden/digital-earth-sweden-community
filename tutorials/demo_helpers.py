@@ -68,7 +68,7 @@ def show_single_result(image_data, colormap, is_ndvi, title, norm):
         if title_provided:
             title = title
         else:
-            title = f'Band index {i}, Created: {im.tags().get("datetime_from_dim", "Unknown Date")}'
+            title = f'Band index {i}, Created: {im.tags().get("timestamp", "Unknown Date")}'
         plt.title(title)
     
     return [im]
