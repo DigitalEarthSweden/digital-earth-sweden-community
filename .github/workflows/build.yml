@@ -36,8 +36,4 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
             --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} \
-            .
-          
-      - name: Upload Docker image
-        run: |
-          docker push harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}
+            --push .
