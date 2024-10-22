@@ -18,11 +18,15 @@ WORKDIR /home/ubuntu
 ENV PATH="/home/ubuntu/miniconda3/bin:${PATH}"
 ARG PATH="/home/ubuntu/miniconda3/bin:${PATH}"
 
-# Install Miniconda
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    bash Miniconda3-latest-Linux-x86_64.sh -b && \
-    rm -f Miniconda3-latest-Linux-x86_64.sh && \
-    echo 'Running $(conda --version)' && \
+ARG TARGETARCH
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+      wget -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh; \
+    else \    
+      wget -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh; \
+    fi 
+
+RUN bash miniconda.sh -b && \
+    rm -f miniconda.sh && \
     /home/ubuntu/miniconda3/bin/conda init && \
     . ~/.bashrc && \
     conda update conda -y && \
