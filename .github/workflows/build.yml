@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,7 +25,6 @@ jobs:
         run: |
           echo "Candidate Image Tag: ${{ github.sha }}"
        
-          
       - name: Pull latest image as cache
         run: |
           docker pull harbor.main.rise-ck8s.com/des-public/tutorials:latest || true
@@ -35,11 +33,11 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx build \
-            --platform linux/amd64,linux/arm64 \  # Specify multiple platforms
+            --platform linux/amd64,linux/arm64 \
             --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
-            --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} \  # Tag with github.sha
-            --push \
-            .
+            --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} \
+            --push .
+          
       - name: Upload Docker image
         run: |
           docker push harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}
