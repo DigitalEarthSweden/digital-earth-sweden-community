@@ -33,9 +33,13 @@ jobs:
 
       - name: Build Docker image using cache
         run: |
-            docker build --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
-              -t harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} .
-  
+          docker buildx create --use
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \  # Specify multiple platforms
+            --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
+            --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} \  # Tag with github.sha
+            --push \
+            .
       - name: Upload Docker image
         run: |
           docker push harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}
