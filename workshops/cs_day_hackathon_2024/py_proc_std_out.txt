@@ -1,0 +1,3 @@
+Executing process graph:
+Saving result of type <class 'xarray.core.dataarray.DataArray'>. 
+Process graph executed
