@@ -79,6 +79,6 @@ temp/
 *.checkpoint.ipynb
 .ipynb_checkpoints/
 
-# Ignore own  data
+# Ignore own  data and results
 data/
-
+tutorials/results/
