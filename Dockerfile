@@ -34,8 +34,10 @@ RUN bash miniconda.sh -b && \
 
 # Create the Conda environment
 COPY --chown=ubuntu:ubuntu tutorials/environment.yml /home/ubuntu/environment.yml
-RUN conda env create -f /home/ubuntu/environment.yml && \
-    conda clean -afy
+RUN mamba env create -c conda-forge -y -f /home/ubuntu/environment.yml && \
+    mamba clean -afy
+
+
 
 # Copy the tutorials directory to /proj
 COPY --chown=ubuntu:ubuntu tutorials /proj/tutorials
@@ -55,4 +57,4 @@ WORKDIR /proj
 EXPOSE 8888
 
 # Set the entry point to automatically start Jupyter Lab
-CMD ["bash", "-c", "source activate openeo-training && jupyter lab --port=8888 --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/proj --no-browser"]
+ENTRYPOINT ["mamba", "run", "-n", "openeo-training", "jupyter", "lab", "--ip=0.0.0.0", "--no-browser","--allow-root","--NotebookApp.token=''"]
