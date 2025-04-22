@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as eo_training_base
+FROM python:3.13-slim
 
 # Install necessary packages
 RUN apt-get update && apt-get -y upgrade && \
@@ -43,8 +43,10 @@ COPY --chown=ubuntu:ubuntu tutorials /proj/tutorials
 # Copy the tests directory to /test
 COPY --chown=ubuntu:ubuntu tests /test
 
+# Copy the input directory to /input
+COPY --chown=ubuntu:ubuntu input /proj/input
 # Set the PYTHONPATH to include the project
-ENV PYTHONPATH="/proj/tutorials:${PYTHONPATH}"
+ENV PYTHONPATH="/proj/tutorials:/app"
 
 # Set the working directory to /proj
 WORKDIR /proj
