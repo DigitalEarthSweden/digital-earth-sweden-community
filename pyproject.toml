@@ -1,0 +1,37 @@
+[project]
+name = "openeo-training"
+version = "0.1.0"
+description = "Installation project for openeo-training"
+requires-python = ">=3.12"
+dependencies = [
+  # "ai-assistant",
+  "bottleneck",  # for speeding up certain operations in xarray
+  "cartopy",  # for plotting and mapping in geospatial applications
+  "cftime",  # for encoding/decoding datetimes for non-standard calendars
+  "dask",  # for parallel computing with xarray
+  "descartes", # plot polygons with holes
+  "folium",
+  "geopandas",
+  "h5netcdf",  # alternative library for reading and writing NetCDF4 files
+  "h5py",
+  "icecream", # for nicer debug printouts
+  "jupyterlab",
+  "llama-index",
+  "matplotlib",
+  "netcdf4",
+  "nc-time-axis", # for plotting cftime.datetime objects with matplotlib
+  "numba",  # for accelerating xarray operations, optional
+  "numpy>=1.9",
+  "pytest",
+  "openeo",
+  "pip",
+  "pydantic",
+  "pypdf",
+  "pyyaml",
+  "rasterio",
+  "rioxarray",
+  "scipy",  # fallback for reading/writing netCDF3 and for xarray interpolation features
+  "seaborn",  # for better color palettes in plots
+  "testbook",
+  "xarray[io,viz]",
+]
