@@ -8,34 +8,44 @@ on:
     branches:
       - main
 
+# When a PR is updated, cancel the jobs from the previous version. Merges
+# do not define head_ref, so use run_id to never cancel those jobs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
-  build_candidate:
-    if: github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '--do-build')
-    concurrency:
-      group: build_candidate:-${{ github.ref }}
-      cancel-in-progress: true
-    uses: ./.github/workflows/build.yml
-    secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  test:
-    needs: build_candidate
-    concurrency:
-      group: test-${{ github.ref }}
-      cancel-in-progress: true
-    uses: ./.github/workflows/test.yml
-    secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Print image tag
+        run: |
+          echo "Image Tag: ${{ github.sha }}"
 
-  publish:
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    concurrency:
-      group: publish-${{ github.ref }}
-      cancel-in-progress: true
-    uses: ./.github/workflows/publish.yml
-    secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker image for x86-64
+        run: |
+          docker buildx create --use --bootstrap
+          docker buildx build \
+            --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
+            --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}-amd64 \
+            --load .
+
+      - name: Run notebook tests
+        run: |
+          DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}-amd64" ./start_tests.sh
+
+      - name: Build arm64 and push to registry
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
+            --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}-amd64 \
+            --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} \
+            --tag harbor.main.rise-ck8s.com/des-public/tutorials:latest \
+            --push .
