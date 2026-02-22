@@ -1,43 +1,77 @@
-FROM python:3.13-slim
+# syntax=docker/dockerfile:1
+FROM ghcr.io/astral-sh/uv:0.10.2@sha256:94a23af2d50e97b87b522d3cea24aaf8a1faedec1344c952767434f69585cbf9 AS uv
 
-# Install necessary packages
-RUN apt-get update && apt-get -y upgrade && \
-    apt-get install -y --no-install-recommends tree gosu sudo wget && \
-    apt-get install -y --no-install-recommends ca-certificates && \
-    apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
+FROM ghcr.io/osgeo/gdal:ubuntu-full-3.12.2@sha256:35cf3b42728f568b911a120d8644b5e5fb7d277b8d3ed07e4b66c0af19c957af AS internal_base
 
-# Create user, add to sudo group, configure sudoers.
-RUN adduser --disabled-password --gecos '' ubuntu && \
-    usermod -aG sudo ubuntu && \
+ENV LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=0 \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PYTHON=python3.12 \
+    UV_PROJECT_ENVIRONMENT=/app
+
+FROM internal_base AS builder
+
+WORKDIR /build
+
+COPY --link --from=uv /uv /uvx /usr/local/bin/
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get -y upgrade && \
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      gcc \
+      g++ \
+      libc6-dev \
+      linux-libc-dev \
+      libgeos-dev \
+      libhdf5-dev \
+      libnetcdf-dev \
+      libproj-dev \
+      libudunits2-dev \
+      python3-dev
+
+COPY --link pyproject.toml uv.lock /build/
+
+# Use a separate cache volume for uv on openeo-training, so it is
+# not inseparable from pip/poetry/npm/etc. cache stored in /root/.cache.
+RUN --mount=type=cache,id=openeo-training-uv-cache,target=/root/.cache \
+    uv sync --locked --no-dev --no-install-project \
+      --no-binary-package fiona \
+      --no-binary-package rasterio \
+      --no-binary-package shapely
+
+
+FROM internal_base AS prod
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get -y upgrade && \
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      gosu \
+      python3 \
+      sudo \
+      tree \
+      wget
+
+RUN usermod -aG sudo ubuntu && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Docker 28.x requires numeric uid/gid with --link when using
+# a non-default builder like the CI action does in this repository.
+COPY --from=builder --link --chown=1000:1000 /app /app
 
 USER ubuntu
 WORKDIR /home/ubuntu
-
-ENV PATH="/home/ubuntu/miniconda3/bin:${PATH}"
-ARG PATH="/home/ubuntu/miniconda3/bin:${PATH}"
-
-ARG TARGETARCH
-RUN if [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh; \
-    else \    
-      wget -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh; \
-    fi 
-
-RUN bash miniconda.sh -b && \
-    rm -f miniconda.sh && \
-    /home/ubuntu/miniconda3/bin/conda init && \
-    . ~/.bashrc && \
-    conda update conda -y && \
-    conda install -y -c conda-forge mamba
-
-# Create the Conda environment
-COPY --chown=ubuntu:ubuntu tutorials/environment.yml /home/ubuntu/environment.yml
-RUN mamba env create -c conda-forge -y -f /home/ubuntu/environment.yml && \
-    mamba clean -afy
-
-
 
 # Copy the tutorials directory to /proj
 COPY --chown=ubuntu:ubuntu tutorials /proj/tutorials
@@ -48,7 +82,8 @@ COPY --chown=ubuntu:ubuntu tests /test
 # Copy the input directory to /input
 COPY --chown=ubuntu:ubuntu input /proj/input
 # Set the PYTHONPATH to include the project
-ENV PYTHONPATH="/proj/tutorials:/app"
+ENV PYTHONPATH="/proj/tutorials:/app" \
+    PATH="/app/bin:$PATH"
 
 # Set the working directory to /proj
 WORKDIR /proj
@@ -57,4 +92,4 @@ WORKDIR /proj
 EXPOSE 8888
 
 # Set the entry point to automatically start Jupyter Lab
-ENTRYPOINT ["mamba", "run", "-n", "openeo-training", "jupyter", "lab", "--ip=0.0.0.0", "--no-browser","--allow-root","--NotebookApp.token=''"]
+ENTRYPOINT ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser","--allow-root","--IdentityProvider.token=''"]
