@@ -53,7 +53,7 @@ FILE_AOI = NULL
 # spheric correction and cloud /cloud shadow detection will suffer without
 # a DEM.
 # Type: full file path
-FILE_DEM = /dem/srtm.vrt
+FILE_DEM = /dem/srtm-v1.202615001.post1.dev80_g80be356c8.d20260515.vrt
 # This parameter specifies whether a DEM database should be used.
 # If TRUE, a predefined DEM database is used for processing, i.e., 
 # a precompiled database containing an individual DEM for each WRS-2 and
