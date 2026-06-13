@@ -3,6 +3,10 @@ FROM ghcr.io/astral-sh/uv:0.11.21@sha256:ff07b86af50d4d9391d9daf4ff89ce427bc544f
 
 FROM ghcr.io/osgeo/gdal:ubuntu-full-3.13.1@sha256:aff1d5515aa0e9b50be34ab11d6c0c2cfabc23cdcb7a2e0bc5748101eedb3e4a AS internal_base
 
+LABEL org.opencontainers.image.source=https://github.com/DigitalEarthSweden/digital-earth-sweden-community
+LABEL org.opencontainers.image.description="Digital Earth Sweden Tutorials"
+LABEL org.opencontainers.image.licences="Apache-2.0"
+
 ENV LC_ALL=C.UTF-8 \
     LANG=C.UTF-8 \
     PYTHONDONTWRITEBYTECODE=1 \

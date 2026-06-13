@@ -5,7 +5,14 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - "**"
+      - "!docs/**"
+      - "!*.md"
+      - "!LICENSE"
   workflow_dispatch:
+  release:
+    types: [published]
 
 # When a PR is updated, cancel the jobs from the previous version. Merges
 # do not define head_ref, so use run_id to never cancel those jobs.
@@ -13,38 +20,94 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: digitalearthsweden/tutorials
+
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 85
+    permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
+      packages: write  # This is required for pushing to ghcr
+      attestations: write # This is required for pushing the attestation
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Print image tag
+      # GitHub documentation states GITHUB_RUN_ID is unique, but it does not state it
+      # is monotonically increasing, so use the number of commits on HEAD instead.
+      - name: Get Git information
         run: |
-          echo "Image Tag: ${{ github.sha }}"
+          TIMESTAMP=$(git log -1 --pretty=%ct pyproject.toml uv.lock tutorials)
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+          SEQUENCE_NUMBER=$(git rev-list --count HEAD)
+          echo "SEQUENCE_NUMBER=$SEQUENCE_NUMBER" >> $GITHUB_ENV
+          SHORT_SHA=$(git rev-parse --short ${{ github.sha }})
+          echo "COMMIT_SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
 
-      - name: Build Docker image for x86-64
-        run: |
-          docker buildx create --use --bootstrap
-          docker buildx build \
-            --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
-            --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}-amd64 \
-            --load .
+      - name: Log in to the Container registry
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=prod-1_${{ env.SEQUENCE_NUMBER }}-${{ env.COMMIT_SHORT_SHA }}
+            type=raw,value=latest
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+
+      - name: Build Docker test image
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          context: .
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+        env:
+          SOURCE_DATE_EPOCH: ${{ env.TIMESTAMP }}
 
       - name: Run notebook tests
         run: |
-          DES_DOCKER_IMAGE="harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}-amd64" ./start_tests.sh
+          DES_DOCKER_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" ./start_tests.sh
 
-      - name: Build arm64 and push to registry
+      - name: Push Docker image
         if: github.ref == 'refs/heads/main'
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login harbor.main.rise-ck8s.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:latest \
-            --cache-from harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }}-amd64 \
-            --tag harbor.main.rise-ck8s.com/des-public/tutorials:${{ github.sha }} \
-            --tag harbor.main.rise-ck8s.com/des-public/tutorials:latest \
-            --push .
+        id: push
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          cache-to: type=gha,mode=max
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+        env:
+          SOURCE_DATE_EPOCH: ${{ env.TIMESTAMP }}
+
+      - name: Attest Docker image
+        if: github.ref == 'refs/heads/main'
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
+        id: attest
+        with:
+          push-to-registry: true
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
