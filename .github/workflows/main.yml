@@ -52,8 +52,10 @@ jobs:
           echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
           SEQUENCE_NUMBER=$(git rev-list --count HEAD)
           echo "SEQUENCE_NUMBER=$SEQUENCE_NUMBER" >> $GITHUB_ENV
-          SHORT_SHA=$(git rev-parse --short ${{ github.sha }})
+          SHORT_SHA=$(git rev-parse --short ${GITHUB_SHA})
           echo "COMMIT_SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+        env:
+          GITHUB_SHA: ${{ github.sha }}
 
       - name: Log in to the Container registry
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
@@ -88,7 +90,7 @@ jobs:
 
       - name: Run notebook tests
         run: |
-          DES_DOCKER_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" ./start_tests.sh
+          DES_DOCKER_IMAGE="${REGISTRY}/${IMAGE_NAME}:latest" ./start_tests.sh
 
       - name: Push Docker image
         if: github.ref == 'refs/heads/main'
