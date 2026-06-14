@@ -28,6 +28,7 @@ permissions: {}
 
 jobs:
   build:
+    name: Build and Test
     runs-on: ubuntu-latest
     timeout-minutes: 85
     permissions:
