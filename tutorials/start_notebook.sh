@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-IMAGE_NAME="harbor.main.rise-ck8s.com/des-public/tutorials:latest"
+IMAGE_NAME="ghcr.io/digitalearthsweden/tutorials:latest"
 NOTEBOOK_PORT=8888
 HOST_DIR=$(pwd)  # The current directory
 CONTAINER_DIR="/proj"  # Directory inside the container

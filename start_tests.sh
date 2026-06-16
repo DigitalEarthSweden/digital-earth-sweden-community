@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set environment variables
-DES_DOCKER_IMAGE=${DES_DOCKER_IMAGE:-"harbor.main.rise-ck8s.com/des-public/tutorials:latest"}
+DES_DOCKER_IMAGE=${DES_DOCKER_IMAGE:-"ghcr.io/digitalearthsweden/tutorials:latest"}
 CONTAINER_NAME="des_notebooks"
 JUPYTER_PORT=9999  # Changed to 9999 to avoid conflicts
 
