@@ -1,7 +1,7 @@
 @echo off
 
 REM Variables
-set IMAGE_NAME=harbor.main.rise-ck8s.com/des-public/tutorials:latest
+set IMAGE_NAME=ghcr.io/digitalearthsweden/tutorials:latest
 set NOTEBOOK_PORT=8888
 set HOST_DIR=%cd%
 set CONTAINER_DIR=/proj
