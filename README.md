@@ -44,30 +44,21 @@ If you want to make changes to the notebooks and save your work, you’ll need t
 
    First, clone the repository to your local machine:
 
-   `git clone https://github.com/your_username/your_repository.git`
+   **HTTPS**: `git clone https://github.com/DigitalEarthSweden/digital-earth-sweden-community.git`
+   
+   **SSH**: `git clone git@github.com:DigitalEarthSweden/digital-earth-sweden-community.git`
 
-   `cd your_repository`
+   and then `cd digital-earth-sweden-community`
 
-2. **Use the Start Scripts**:
+2. **Run the following docker commands**:
 
-   After cloning, you can use the provided start scripts to run the notebook server with your local directory mounted inside the container. This means that any changes you make to the notebooks will be saved locally.
+   `docker pull ghcr.io/digitalearthsweden/tutorials:latest`
 
-   - On **Windows**:
+   `docker run --rm -it -p 8888:8888 --mount type=bind,source=./tutorials,target=/proj ghcr.io/digitalearthsweden/tutorials:latest`
 
-     Run the `start_notebook.BAT` script:
+   These scripts will start the Docker container, mount the tutorials directory, and expose the Jupyter Lab server at `http://127.0.0.1:8888`.
 
-     `start_notebook.BAT`
-
-   - On **macOS/Linux**:
-
-     Run the `start_notebook.sh` script:
-
-     `./start_notebook.sh`
-
-   These scripts will start the Docker container, mount the current directory, and expose the Jupyter Lab server at `http://127.0.0.1:8888`. Your files will be saved locally in the directory you cloned.
-
-### What It Means to Mount Locally
-- **Mounting**: Mounting your local directory to the container allows the container to read and write files from your local machine. This ensures that any changes you make in Jupyter Lab are reflected in your local files.
+- **Mounting**: Mounting your local directory to the container allows the container to read and write files from your local machine. This ensures that any changes you make in Jupyter Lab, including new files and folders, will be saved in the tutorials folder.
 
 ## Setting Up a Local Environment
 
@@ -101,28 +92,6 @@ If you prefer to work in your local environment without Docker, you can set up t
 
 ### Requirements
 - **Conda**: Make sure you have Conda installed to manage the environment.
-
-## Building the Notebook Server
-
-If you need to build the Docker image and run the notebooks yourself, you can use the provided Makefile.
-
-### How to Build and Run
-
-1. **Install Requirements**:
-
-   Ensure that you have Docker and Make installed on your system.
-
-2. **Build the Notebook Server**:
-
-   Use the following command to build the Docker image and start the notebook server:
-
-   `make start-notebook`
-
-   This command will:
-   - Build the Docker image using the `Dockerfile`.
-   - Mount your local directory into the container.
-   - Start the Jupyter Lab server on `http://127.0.0.1:8888`.
-
 
 # Additional Resources 
 If you are new to Digital Earth Sweden, please check  
