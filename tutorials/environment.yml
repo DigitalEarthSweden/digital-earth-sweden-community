@@ -8,6 +8,8 @@ channels:
   - conda-forge
 
 dependencies:
+  - folium
+  - contextily
   - python=3.10
   - gdal=3.6.3
   - rasterio
@@ -38,6 +40,12 @@ dependencies:
   - descartes # plot polygons with holes
   - numpy>=1.9
   - pip:
+    # Pinned to v0.1.0 per agentic_workflow rollout plan W1.3 (2026-04-24).
+    # NOTE: the DigitalEarthSweden org transfer is pending (see ImintEngine's
+    # docs/imintengine-transfer-plan.md). Until then this URL 404s — to
+    # actually run this notebook, temporarily replace with
+    # TobiasEdman/imintengine.git@v0.1.0. Switch back after org transfer.
+    - git+https://github.com/DigitalEarthSweden/imintengine.git@v0.1.0#egg=imintengine
     - openeo
     - rioxarray  # for rasterio xarray extensions, optional but useful for geospatial data
     - nc-time-axis  # for plotting cftime.datetime objects with matplotlib
