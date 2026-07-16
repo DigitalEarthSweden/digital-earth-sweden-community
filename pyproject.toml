@@ -27,8 +27,6 @@ dependencies = [
   "pip",
   "pydantic",
   "pypdf",
-  # FIXME: ensure that this works with pystac 1.15 and remove dependency.
-  "pystac < 1.15",
   "pyyaml",
   "rasterio",
   "rioxarray",
