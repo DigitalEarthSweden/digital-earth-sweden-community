@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
 FROM ghcr.io/astral-sh/uv:0.12.1@sha256:cf4eedcaa81655197f625739489effcbe71b61ceb1506f332c3facae5deceded AS uv
 
 FROM ghcr.io/osgeo/gdal:ubuntu-full-3.13.2@sha256:de280a240ef4309e6fb64b943e0472e6098099b813a6b9ff0e182bc6976a3fdb AS internal_base
