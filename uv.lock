@@ -2555,7 +2555,7 @@ requires-dist = [
     { name = "openeo" },
     { name = "pip" },
     { name = "pydantic" },
-    { name = "pypdf" },
+    { name = "pypdf", specifier = ">=6" },
     { name = "pytest" },
     { name = "pyyaml" },
     { name = "rasterio" },
