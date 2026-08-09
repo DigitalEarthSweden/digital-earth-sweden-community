@@ -26,7 +26,7 @@ dependencies = [
   "openeo",
   "pip",
   "pydantic",
-  "pypdf",
+  "pypdf >=6",
   "pyyaml",
   "rasterio",
   "rioxarray",
