@@ -17,7 +17,7 @@ jobs:
       checks: read # Required for reading the status of other workflows.
     # August 2026: cannot use github.repository_owner for uses: for security
     #              reasons.
-    uses: DigitalEarthSweden/.github/.github/workflows/merge-gateway.yaml@main
+    uses: DigitalEarthSweden/.github/.github/workflows/merge-gateway.yaml@0adea110cd9bfac2c7213926de7bbe678ea6e01a # packages/action-merge-gateway/v1.0.0
     with:
       # Timeout of longest workflow (main.yaml).
       timeout: 85
