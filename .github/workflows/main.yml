@@ -1,15 +1,16 @@
 name: Main CI Pipeline
 
 on:
-  push:
   pull_request:
-    branches:
-      - main
-    paths:
+    paths: &paths
       - "**"
       - "!docs/**"
       - "!*.md"
       - "!LICENSE"
+  push:
+    branches:
+      - main
+    paths: *paths
   workflow_dispatch:
   release:
     types: [published]
