@@ -1,0 +1,46 @@
+{
+  "artifacts": [
+    {
+      "after_sha256": "6a972b4d17c99d9f2a999bf773df7498172ca3794a1a6f36a7cfdb7bf69e7682",
+      "before_sha256": null,
+      "kind": "file",
+      "owned": true,
+      "path": "AGENTS.md"
+    },
+    {
+      "after_sha256": "d105c8b51f3455481c5b4f4e08c7cd672ea0fc422c7bdfa3df448fae100e37a9",
+      "before_sha256": null,
+      "kind": "file",
+      "owned": true,
+      "path": "CLAUDE.md"
+    },
+    {
+      "after_sha256": "a746f158a6d68672b83fb77701307b16b5746247a7b7678dd796bf9035ccacb3",
+      "before_sha256": null,
+      "kind": "file",
+      "owned": true,
+      "path": ".agents/README.md"
+    },
+    {
+      "after_sha256": "3e0c5f42d05e87decc36fa234336f3c8d161489f09c818cb9bcd865d14f17894",
+      "before_sha256": null,
+      "kind": "file",
+      "owned": true,
+      "path": ".agents/schema.json"
+    },
+    {
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "before_sha256": null,
+      "kind": "file",
+      "owned": true,
+      "path": ".agents/tasks/.gitkeep"
+    }
+  ],
+  "created_directories": [
+    ".agents",
+    ".agents/tasks"
+  ],
+  "installer_version": "1",
+  "profile": "coordination",
+  "schema_version": "1"
+}

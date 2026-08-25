@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "agentic-task",
+  "type": "object",
+  "required": [
+    "id",
+    "subject",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$"
+    },
+    "subject": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "claimed",
+        "in_progress",
+        "completed",
+        "blocked",
+        "abandoned"
+      ]
+    },
+    "claimed_by": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "agent identity, e.g. 'te-claude' or 'te-codex'"
+    },
+    "runtime": {
+      "enum": [
+        "claude",
+        "codex",
+        "mistral",
+        null
+      ]
+    },
+    "claimed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "blocked_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "branch": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "branch where work happened"
+    },
+    "pr": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "PR URL when ready"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
