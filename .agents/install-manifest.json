@@ -1,28 +1,28 @@
 {
   "artifacts": [
     {
-      "after_sha256": "6a972b4d17c99d9f2a999bf773df7498172ca3794a1a6f36a7cfdb7bf69e7682",
+      "after_sha256": "2227020115140d1ba55980fc711667f6a191028223efef0c5f96076cebcca7b2",
       "before_sha256": null,
       "kind": "file",
       "owned": true,
       "path": "AGENTS.md"
     },
     {
-      "after_sha256": "d105c8b51f3455481c5b4f4e08c7cd672ea0fc422c7bdfa3df448fae100e37a9",
+      "after_sha256": "369d04363f38bc189dcb5e63c17c14a5312a2a89310bac0df1b6ef4915d7fbb8",
       "before_sha256": null,
       "kind": "file",
       "owned": true,
       "path": "CLAUDE.md"
     },
     {
-      "after_sha256": "a746f158a6d68672b83fb77701307b16b5746247a7b7678dd796bf9035ccacb3",
+      "after_sha256": "6838c4f7586b753a9161fa880d8c87167502bdbcfa12d5db626a155c721a1d85",
       "before_sha256": null,
       "kind": "file",
       "owned": true,
       "path": ".agents/README.md"
     },
     {
-      "after_sha256": "3e0c5f42d05e87decc36fa234336f3c8d161489f09c818cb9bcd865d14f17894",
+      "after_sha256": "3979a5a7446596622ec7a8f2824b433aaee568ea8e08245c91e3a192fe06481f",
       "before_sha256": null,
       "kind": "file",
       "owned": true,
@@ -40,7 +40,7 @@
     ".agents",
     ".agents/tasks"
   ],
-  "installer_version": "1",
+  "installer_version": "2",
   "profile": "coordination",
   "schema_version": "1"
 }

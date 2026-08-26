@@ -45,6 +45,14 @@
         null
       ]
     },
+    "coordination_authority": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "credential-free canonical remote identity from agentic-task authority"
+    },
     "claimed_at": {
       "type": [
         "string",

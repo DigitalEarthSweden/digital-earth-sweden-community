@@ -6,15 +6,53 @@ and human contributors.
 ## Required workflow
 
 1. Create an exclusively owned worktree and runtime-labelled branch.
-2. Add a pending task JSON under `.agents/tasks/`.
-3. Run `agentic-task claim <repo>` from a clean worktree.
-4. Edit only paths owned by the active task.
-5. Verify the change, integrate it through Git, then run
-   `agentic-task complete <repo> <task-id>`.
+2. Add and commit a `pending` task JSON under `.agents/tasks/`. For a remote
+   repository, first obtain its credential-free identity and store the result
+   as `coordination_authority`:
 
-Git push is the cross-machine arbitration point. If push does not confirm
-success, the CLI keeps the local metadata commit and exits non-zero. Reconcile
-explicitly; never reset or rebase a caller's working tree automatically.
+   ```bash
+   agentic-task authority . --remote origin
+   ```
+
+   Relative URLs, embedded credentials, URL rewrite rules, and differing fetch
+   and push targets are rejected.
+3. From the clean worktree, claim it against the canonical remote:
+
+   ```bash
+   AGENT_ID=te-codex AGENT_RUNTIME=codex \
+     agentic-task claim . --remote origin
+   ```
+
+   Omit `--remote` only when the repository genuinely has no remotes.
+4. Coordinate the task's intended file scope explicitly. A claim arbitrates
+   the whole task; this schema does not infer or enforce path ownership.
+5. Verify and integrate the change, then complete the task with the same
+   identity, runtime, and canonical remote:
+
+   ```bash
+   AGENT_ID=te-codex AGENT_RUNTIME=codex \
+     agentic-task complete . <task-id> --remote origin
+   ```
+
+## Claim authority and recovery
+
+For repositories with a remote, the authoritative lock is the deterministic
+`refs/heads/agentic-task/claims/<task-id>` ref. The CLI updates it with an exact
+compare-and-swap and confirms its SHA after every push. Different agent branches
+therefore cannot both acquire the same task. The hashed
+`coordination_authority` prevents two forks or differently
+configured remotes from silently creating independent locks without committing
+transport credentials or private URL material.
+
+If publication is rejected or ambiguous, the CLI keeps the local metadata
+commit and exits non-zero. Inspect the reported commit, the authoritative ref,
+and the task owner, then reconcile explicitly. Never reset, rebase, or rewrite
+a caller's working tree automatically.
+
+The operational lifecycle for this profile is `pending → claimed → completed`.
+The CLI verifies owner, runtime, and authoritative-ref ancestry on completion.
+Other schema statuses are reserved for governance workflows and must not be
+hand-edited into this coordination profile.
 
 `schema.json` defines the task format. `install-manifest.json` records only the
 artifacts managed or adopted by the installer so rollback is narrow and
