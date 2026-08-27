@@ -26,7 +26,12 @@ and human contributors.
    Omit `--remote` only when the repository genuinely has no remotes.
 4. Coordinate the task's intended file scope explicitly. A claim arbitrates
    the whole task; this schema does not infer or enforce path ownership.
-5. Verify and integrate the change, then complete the task with the same
+5. When ownership moves to another runtime or machine, write an immutable
+   record under `.agents/handoffs/<task-id>/` with
+   `~/.agents/bin/agentic-continuity handoff`. Validate it against
+   `.agents/handoff-schema.json` and commit it
+   with the task branch. Never update a shared `LATEST.md` pointer.
+6. Verify and integrate the change, then complete the task with the same
    identity, runtime, and canonical remote:
 
    ```bash
@@ -54,6 +59,9 @@ The CLI verifies owner, runtime, and authoritative-ref ancestry on completion.
 Other schema statuses are reserved for governance workflows and must not be
 hand-edited into this coordination profile.
 
-`schema.json` defines the task format. `install-manifest.json` records only the
+`schema.json` defines the task format; `handoff-schema.json` defines the
+committable cross-runtime handoff. `install-manifest.json` records only the
 artifacts managed or adopted by the installer so rollback is narrow and
-drift-safe.
+drift-safe. Personal checkpoints, mechanical snapshots, the live inbox,
+active-session state, and active-job locks stay outside Git under
+`~/.agents/continuity/`.

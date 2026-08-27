@@ -1,21 +1,21 @@
 {
   "artifacts": [
     {
-      "after_sha256": "2227020115140d1ba55980fc711667f6a191028223efef0c5f96076cebcca7b2",
+      "after_sha256": "635c5ff84077a44f82c8a780e76d3edfaf0395b89d79901b717f1aa4d76cddc2",
       "before_sha256": null,
       "kind": "file",
       "owned": true,
       "path": "AGENTS.md"
     },
     {
-      "after_sha256": "369d04363f38bc189dcb5e63c17c14a5312a2a89310bac0df1b6ef4915d7fbb8",
+      "after_sha256": "5b5b800b4eeb7a1b6d746495987cfc0007e19d45ce38252827fbb25d117ba122",
       "before_sha256": null,
       "kind": "file",
       "owned": true,
       "path": "CLAUDE.md"
     },
     {
-      "after_sha256": "6838c4f7586b753a9161fa880d8c87167502bdbcfa12d5db626a155c721a1d85",
+      "after_sha256": "59ef92bba167614695916aa46c252194d39e6c869f250907ee01673bbc852068",
       "before_sha256": null,
       "kind": "file",
       "owned": true,
@@ -34,13 +34,28 @@
       "kind": "file",
       "owned": true,
       "path": ".agents/tasks/.gitkeep"
+    },
+    {
+      "after_sha256": "4b04d30517d769c67039b2ae006dc9ec16c2dc186334f6525a8ce946f115eb43",
+      "before_sha256": null,
+      "kind": "file",
+      "owned": true,
+      "path": ".agents/handoff-schema.json"
+    },
+    {
+      "after_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "before_sha256": null,
+      "kind": "file",
+      "owned": true,
+      "path": ".agents/handoffs/.gitkeep"
     }
   ],
   "created_directories": [
     ".agents",
-    ".agents/tasks"
+    ".agents/tasks",
+    ".agents/handoffs"
   ],
-  "installer_version": "2",
+  "installer_version": "3",
   "profile": "coordination",
   "schema_version": "1"
 }
