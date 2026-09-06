@@ -35,3 +35,6 @@ dependencies = [
   "testbook",
   "xarray[io,viz]",
 ]
+
+[tool.uv]
+exclude-newer = "7 days"
