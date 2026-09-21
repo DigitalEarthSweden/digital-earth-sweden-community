@@ -3,8 +3,8 @@ revision = 3
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14' and platform_machine == 'ARM64' and sys_platform == 'win32'",
-    "python_full_version < '3.14' and platform_machine == 'ARM64' and sys_platform == 'win32'",
     "(python_full_version >= '3.14' and platform_machine != 'ARM64') or (python_full_version >= '3.14' and sys_platform != 'win32')",
+    "python_full_version < '3.14' and platform_machine == 'ARM64' and sys_platform == 'win32'",
     "(python_full_version < '3.14' and platform_machine != 'ARM64') or (python_full_version < '3.14' and sys_platform != 'win32')",
 ]
 
@@ -2687,7 +2687,7 @@ wheels = [
 
 [[package]]
 name = "openeo"
-version = "0.52.0"
+version = "0.51.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "deprecated" },
@@ -2702,7 +2702,7 @@ dependencies = [
     { name = "xarray" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/07/0b/ceda0981b73b262ce6975e6844a42d119acbb757f5aacb123cc5f220fef6/openeo-0.52.0-py3-none-any.whl", hash = "sha256:ed974deac6ef028627e4b7c7e0969dca0e1a3e6d2486a3d24fc8ed3780765a35", size = 356992, upload-time = "2026-09-08T09:34:02.863Z" },
+    { url = "https://files.pythonhosted.org/packages/a8/8f/cfcaeaefa88ba2a7f06ac5ece862b272b10645f72e5f3a9a27325c8499fd/openeo-0.51.0-py3-none-any.whl", hash = "sha256:93e62ac67a3741863a796127db85c4336315b050038e9da946b01c718d923e02", size = 349236, upload-time = "2026-07-16T16:02:42.058Z" },
 ]
 
 [[package]]
