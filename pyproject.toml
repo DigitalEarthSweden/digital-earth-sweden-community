@@ -5,35 +5,35 @@ description = "Installation project for openeo-training"
 requires-python = ">=3.12"
 dependencies = [
   # "ai-assistant",
-  "bottleneck",  # for speeding up certain operations in xarray
-  "cartopy",  # for plotting and mapping in geospatial applications
-  "cftime",  # for encoding/decoding datetimes for non-standard calendars
-  "dask",  # for parallel computing with xarray
-  "descartes", # plot polygons with holes
-  "folium",
-  "geopandas",
-  "h5netcdf",  # alternative library for reading and writing NetCDF4 files
-  "h5py",
-  "icecream", # for nicer debug printouts
-  "jupyterlab",
-  "llama-index",
-  "matplotlib",
-  "netcdf4",
-  "nc-time-axis", # for plotting cftime.datetime objects with matplotlib
-  "numba",  # for accelerating xarray operations, optional
+  "bottleneck >= 1",  # for speeding up certain operations in xarray
+  "cartopy >= 0.25",  # for plotting and mapping in geospatial applications
+  "cftime >= 1",  # for encoding/decoding datetimes for non-standard calendars
+  "dask >= 2025",  # for parallel computing with xarray
+  "descartes >= 1", # plot polygons with holes
+  "folium >= 0.20",
+  "geopandas >= 1",
+  "h5netcdf >= 1",  # alternative library for reading and writing NetCDF4 files
+  "h5py >= 3",
+  "icecream >= 2", # for nicer debug printouts
+  "jupyterlab >= 4",
+  "llama-index >= 0.14",
+  "matplotlib >= 3",
+  "netcdf4 >= 1",
+  "nc-time-axis >= 1", # for plotting cftime.datetime objects with matplotlib
+  "numba >= 0.6",  # for accelerating xarray operations, optional
   "numpy>=1.9",
-  "pytest",
-  "openeo",
-  "pip",
-  "pydantic",
+  "pytest >= 9",
+  "openeo >= 0.50",
+  "pip >= 26",
+  "pydantic >= 2",
   "pypdf >=6",
-  "pyyaml",
-  "rasterio",
-  "rioxarray",
-  "scipy",  # fallback for reading/writing netCDF3 and for xarray interpolation features
-  "seaborn",  # for better color palettes in plots
-  "testbook",
-  "xarray[io,viz]",
+  "pyyaml >= 6",
+  "rasterio >= 1.5",
+  "rioxarray >= 0.21",
+  "scipy >= 1",  # fallback for reading/writing netCDF3 and for xarray interpolation features
+  "seaborn >= 0.13",  # for better color palettes in plots
+  "testbook >= 0.4",
+  "xarray[io,viz] >= 2025",
 ]
 
 [tool.uv]
