@@ -2712,7 +2712,6 @@ source = { virtual = "." }
 dependencies = [
     { name = "bottleneck" },
     { name = "cartopy" },
-    { name = "cftime" },
     { name = "dask" },
     { name = "descartes" },
     { name = "folium" },
@@ -2723,7 +2722,6 @@ dependencies = [
     { name = "jupyterlab" },
     { name = "llama-index" },
     { name = "matplotlib" },
-    { name = "nc-time-axis" },
     { name = "netcdf4" },
     { name = "numba" },
     { name = "numpy" },
@@ -2745,7 +2743,6 @@ dependencies = [
 requires-dist = [
     { name = "bottleneck", specifier = ">=1" },
     { name = "cartopy", specifier = ">=0.25" },
-    { name = "cftime", specifier = ">=1" },
     { name = "dask", specifier = ">=2025" },
     { name = "descartes", specifier = ">=1" },
     { name = "folium", specifier = ">=0.20" },
@@ -2756,7 +2753,6 @@ requires-dist = [
     { name = "jupyterlab", specifier = ">=4" },
     { name = "llama-index", specifier = ">=0.14" },
     { name = "matplotlib", specifier = ">=3" },
-    { name = "nc-time-axis", specifier = ">=1" },
     { name = "netcdf4", specifier = ">=1" },
     { name = "numba", specifier = ">=0.6" },
     { name = "numpy", specifier = ">=1.9" },
