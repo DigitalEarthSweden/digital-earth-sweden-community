@@ -8,7 +8,6 @@ dependencies = [
   "bottleneck >= 1",  # for speeding up certain operations in xarray
   "cartopy >= 0.25",  # for plotting and mapping in geospatial applications
   "dask >= 2025",  # for parallel computing with xarray
-  "descartes >= 1", # plot polygons with holes
   "folium >= 0.20",
   "geopandas >= 1",
   "h5netcdf >= 1",  # alternative library for reading and writing NetCDF4 files
