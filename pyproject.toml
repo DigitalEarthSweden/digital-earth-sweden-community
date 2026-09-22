@@ -7,7 +7,6 @@ dependencies = [
   # "ai-assistant",
   "bottleneck >= 1",  # for speeding up certain operations in xarray
   "cartopy >= 0.25",  # for plotting and mapping in geospatial applications
-  "cftime >= 1",  # for encoding/decoding datetimes for non-standard calendars
   "dask >= 2025",  # for parallel computing with xarray
   "descartes >= 1", # plot polygons with holes
   "folium >= 0.20",
@@ -19,7 +18,6 @@ dependencies = [
   "llama-index >= 0.14",
   "matplotlib >= 3",
   "netcdf4 >= 1",
-  "nc-time-axis >= 1", # for plotting cftime.datetime objects with matplotlib
   "numba >= 0.6",  # for accelerating xarray operations, optional
   "numpy>=1.9",
   "pytest >= 9",
