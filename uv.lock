@@ -881,18 +881,6 @@ wheels = [
 ]
 
 [[package]]
-name = "descartes"
-version = "1.1.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "matplotlib" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/1d/6f/81735a30432b74f41db6754dd13869021ccfed3088d1cf7a6cfc0af9ac49/descartes-1.1.0.tar.gz", hash = "sha256:135a502146af5ed6ff359975e2ebc5fa4b71b5432c355c2cafdc6dea1337035b", size = 3525, upload-time = "2017-01-17T15:37:03.945Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/b6/1ed2eb03989ae574584664985367ba70cd9cf8b32ee8cad0e8aaeac819f3/descartes-1.1.0-py3-none-any.whl", hash = "sha256:4c62dc41109689d03e4b35de0a2bcbdeeb81047badc607c4415d5c753bd683af", size = 5804, upload-time = "2017-01-17T15:37:02.525Z" },
-]
-
-[[package]]
 name = "dirtyjson"
 version = "1.0.8"
 source = { registry = "https://pypi.org/simple" }
@@ -2713,7 +2701,6 @@ dependencies = [
     { name = "bottleneck" },
     { name = "cartopy" },
     { name = "dask" },
-    { name = "descartes" },
     { name = "folium" },
     { name = "geopandas" },
     { name = "h5netcdf" },
@@ -2744,7 +2731,6 @@ requires-dist = [
     { name = "bottleneck", specifier = ">=1" },
     { name = "cartopy", specifier = ">=0.25" },
     { name = "dask", specifier = ">=2025" },
-    { name = "descartes", specifier = ">=1" },
     { name = "folium", specifier = ">=0.20" },
     { name = "geopandas", specifier = ">=1" },
     { name = "h5netcdf", specifier = ">=1" },
