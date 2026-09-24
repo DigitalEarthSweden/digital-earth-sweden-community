@@ -35,3 +35,8 @@ dependencies = [
 
 [tool.uv]
 exclude-newer = "7 days"
+
+# Not a Python package: disable setuptools auto-discovery so that
+# `pip install .` only installs the dependencies.
+[tool.setuptools]
+py-modules = []
