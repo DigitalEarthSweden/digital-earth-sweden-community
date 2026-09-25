@@ -20,7 +20,7 @@ from testbook import testbook
         "060_EO_030-Spatial-Filtering.ipynb",
     ],
 )
-def test_test_environment_setup(bookname):
+def test_test_environment_setup(bookname, monkeypatch):
     # Check if we're in Docker by checking if /proj/tutorials exists
     if os.path.exists("/proj/tutorials"):
         notebooks = "/proj/tutorials"
@@ -33,6 +33,10 @@ def test_test_environment_setup(bookname):
 
     # Make sure the notebook exists before proceeding
     assert os.path.exists(notebook_path), f"Notebook {notebook_path} not found!"
+
+    # Run the kernel in the notebook directory so that helper modules
+    # such as config.py can be imported, as they are in Jupyter Lab
+    monkeypatch.chdir(notebooks)
 
     # Load the notebook using testbook
     with testbook(notebook_path, execute=False, timeout=-1) as tb:

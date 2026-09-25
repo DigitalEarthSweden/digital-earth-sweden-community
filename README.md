@@ -6,28 +6,29 @@ This is where you can:
 - Make wishes for and discuss new features
 - Ask and answer questions
 
-The community repo is shared and monitored by developers, stakeholders and regular users. It is the resposibility for us all to look into this repository and help each other out. 
+The community repo is shared and monitored by developers, stakeholders and regular users. It is the responsibility of us all to look into this repository and help each other out.
+
 # Tutorials
- This guide will walk you through various ways to run the Jupyter notebooks included in this repository, whether you just want to explore the content or dive deep into working with the files.
+This guide will walk you through various ways to run the Jupyter notebooks included in this repository, whether you just want to explore the content or dive deep into working with the files.
 
 ## Running a Notebook Server Without Cloning the Repo
 
-If you want to quickly check out the tutorials without saving any changes or downloading the files locally, you can run the notebook server directly from the Docker image. This is a great option if you’re just exploring and don’t need to save your work. If you do not have Docker installed or know how to use it check out [https://docs.docker.com/desktop/](https://docs.docker.com/desktop/)
+If you want to quickly check out the tutorials without saving any changes or downloading the files locally, you can run the notebook server directly from the Docker image. This is a great option if you’re just exploring and don’t need to save your work. If you do not have Docker installed or know how to use it check out [https://docs.docker.com/desktop/](https://docs.docker.com/desktop/).
 
 ### How to Run
 
 1. Open your terminal or command prompt.
 2. Run the following Docker commands:
- 
+
    `docker pull ghcr.io/digitalearthsweden/tutorials:latest`
-   
+
    `docker run --rm -it -p 8888:8888 ghcr.io/digitalearthsweden/tutorials:latest`
 
-5. Open Firefox (or your preferred browser) and navigate to the URL provided in the terminal output to access the Jupyter Lab interface.
+3. Open Firefox (or your preferred browser) and navigate to `http://127.0.0.1:8888` to access the Jupyter Lab interface.
 
-   If using Firefox, you can also start the browser with the URL directly from the command line (replace `your_token_here` with the actual token):
+   If using Firefox, you can also start the browser with the URL directly from the command line:
 
-   `firefox http://127.0.0.1:8888
+   `firefox http://127.0.0.1:8888`
 
    This will allow you to explore the tutorials without needing to clone the repository or worry about saving files.
 
@@ -56,49 +57,52 @@ If you want to make changes to the notebooks and save your work, you’ll need t
 
    `docker run --rm -it -p 8888:8888 --mount type=bind,source=./tutorials,target=/proj ghcr.io/digitalearthsweden/tutorials:latest`
 
-   These scripts will start the Docker container, mount the tutorials directory, and expose the Jupyter Lab server at `http://127.0.0.1:8888`.
+   These commands will start the Docker container, mount the tutorials directory, and expose the Jupyter Lab server at `http://127.0.0.1:8888`.
 
 - **Mounting**: Mounting your local directory to the container allows the container to read and write files from your local machine. This ensures that any changes you make in Jupyter Lab, including new files and folders, will be saved in the tutorials folder.
 
 ## Setting Up a Local Environment
 
-If you prefer to work in your local environment without Docker, you can set up the Conda environment defined in the repository.
+If you prefer to work in your local environment without Docker, you can create the Python environment with [uv](https://docs.astral.sh/uv/). uv installs exactly the same package versions as the Docker image (from `uv.lock`). Please do not use Conda or pip for these tutorials; mixing package managers easily leads to versioning problems.
 
 ### Steps to Set Up
 
-1. **Install Conda**: If you don’t already have Conda installed, you can download and install it from the [official site](https://docs.conda.io/en/latest/miniconda.html).
+1. **Install uv**: Follow the [installation instructions](https://docs.astral.sh/uv/getting-started/installation/).
 
 2. **Create the Environment**:
 
-   Navigate to the directory where you cloned the repository and create the Conda environment:
+   Navigate to the directory where you cloned the repository and run:
 
-   `conda env create -f environment.yml`
+   `uv sync`
 
-   This command will create a Conda environment with all the dependencies needed to run the notebooks.
+   This creates a virtual environment in `.venv` with all the dependencies needed to run the notebooks. If the Python version pinned in `.python-version` is not installed, uv will download it for you.
 
-3. **Activate the Environment**:
+3. **Run Jupyter Lab**:
 
-   Activate the environment:
-
-   `conda activate openeo-training`
-
-4. **Run Jupyter Lab**:
-
-   Start Jupyter Lab:
-
-   `jupyter lab`
+   `uv run jupyter lab`
 
    This will launch Jupyter Lab in your default web browser, allowing you to work with the tutorials in a local environment.
 
-### Requirements
-- **Conda**: Make sure you have Conda installed to manage the environment.
+### Adding Packages
 
-# Additional Resources 
-If you are new to Digital Earth Sweden, please check  
-Also the following resources may be helpful:
+To install additional packages, use uv from a terminal in the repository instead of pip:
+
+`uv add <package>`
+
+### Running the Tests
+
+The notebooks are tested by executing them against the Digital Earth Sweden platform:
+
+`uv run pytest tests/`
+
+### Requirements
+- **uv**: Make sure you have uv installed. It installs the required Python version for you.
+
+# Additional Resources
+If you are new to Digital Earth Sweden, the following resources may be helpful:
 - https://maps.digitalearth.se
 - https://explorer.digitalearth.se
 - https://editor.openeo.org/?server=https%3A%2F%2Fopeneo.digitalearth.se
 
 
-**NOTE!** Since our team is very small, we will take turn to monitor this forum. Typically this will be assigned a slot on mondays. Please avoid using Teams and personal messages to the team. 
+**NOTE!** Since our team is very small, we will take turns to monitor this forum. Typically this will be assigned a slot on Mondays. Please avoid using Teams and personal messages to the team.
