@@ -21,12 +21,12 @@ dependencies = [
   "numpy>=1.9",
   "pytest >= 9",
   "openeo >= 0.50",
-  "pip >= 26",
   "pydantic >= 2",
   "pypdf >=6",
   "pyyaml >= 6",
   "rasterio >= 1.5",
   "rioxarray >= 0.21",
+  "scikit-learn >= 1",  # for machine learning in the MOOC notebooks
   "scipy >= 1",  # fallback for reading/writing netCDF3 and for xarray interpolation features
   "seaborn >= 0.13",  # for better color palettes in plots
   "testbook >= 0.4",
@@ -36,7 +36,3 @@ dependencies = [
 [tool.uv]
 exclude-newer = "7 days"
 
-# Not a Python package: disable setuptools auto-discovery so that
-# `pip install .` only installs the dependencies.
-[tool.setuptools]
-py-modules = []

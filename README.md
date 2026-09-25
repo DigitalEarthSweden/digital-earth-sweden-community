@@ -63,9 +63,9 @@ If you want to make changes to the notebooks and save your work, you’ll need t
 
 ## Setting Up a Local Environment
 
-If you prefer to work in your local environment without Docker, you can create a Python virtual environment from the `pyproject.toml` in the repository. We recommend [uv](https://docs.astral.sh/uv/), since it installs exactly the same package versions as the Docker image (from `uv.lock`). Please do not use Conda for these tutorials; mixing package managers easily leads to versioning problems.
+If you prefer to work in your local environment without Docker, you can create the Python environment with [uv](https://docs.astral.sh/uv/). uv installs exactly the same package versions as the Docker image (from `uv.lock`). Please do not use Conda or pip for these tutorials; mixing package managers easily leads to versioning problems.
 
-### Option 1: uv (recommended)
+### Steps to Set Up
 
 1. **Install uv**: Follow the [installation instructions](https://docs.astral.sh/uv/getting-started/installation/).
 
@@ -83,23 +83,11 @@ If you prefer to work in your local environment without Docker, you can create a
 
    This will launch Jupyter Lab in your default web browser, allowing you to work with the tutorials in a local environment.
 
-### Option 2: pip
+### Adding Packages
 
-1. **Create and Activate a Virtual Environment** (requires Python 3.12 or newer):
+To install additional packages, use uv from a terminal in the repository instead of pip:
 
-   `python -m venv .venv`
-
-   `source .venv/bin/activate` (on Windows: `.venv\Scripts\activate`)
-
-2. **Install the Dependencies**:
-
-   `pip install .`
-
-   Note that pip does not use the lock file, so it installs the newest package versions allowed by `pyproject.toml`. These may differ from the versions in the Docker image.
-
-3. **Run Jupyter Lab**:
-
-   `jupyter lab`
+`uv add <package>`
 
 ### Running the Tests
 
@@ -108,7 +96,7 @@ The notebooks are tested by executing them against the Digital Earth Sweden plat
 `uv run pytest tests/`
 
 ### Requirements
-- **uv** (recommended), or **Python 3.12 or newer** with pip.
+- **uv**: Make sure you have uv installed. It installs the required Python version for you.
 
 # Additional Resources
 If you are new to Digital Earth Sweden, the following resources may be helpful:
