@@ -27,6 +27,7 @@ dependencies = [
   "pyyaml >= 6",
   "rasterio >= 1.5",
   "rioxarray >= 0.21",
+  "scikit-learn >= 1",  # for machine learning in the MOOC notebooks
   "scipy >= 1",  # fallback for reading/writing netCDF3 and for xarray interpolation features
   "seaborn >= 0.13",  # for better color palettes in plots
   "testbook >= 0.4",
