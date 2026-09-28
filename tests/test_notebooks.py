@@ -34,7 +34,14 @@ def test_test_environment_setup(bookname):
     # Make sure the notebook exists before proceeding
     assert os.path.exists(notebook_path), f"Notebook {notebook_path} not found!"
 
-    # Load the notebook using testbook
-    with testbook(notebook_path, execute=False, timeout=-1) as tb:
+    # Load the notebook using testbook. Start the kernel in the notebook
+    # directory so that helper modules such as config.py can be imported,
+    # as they are in Jupyter Lab
+    with testbook(
+        notebook_path,
+        execute=False,
+        timeout=-1,
+        resources={"metadata": {"path": notebooks}},
+    ) as tb:
         assert tb  # Ensures the notebook is properly loaded
         tb.execute()
