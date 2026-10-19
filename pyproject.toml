@@ -30,6 +30,7 @@ dependencies = [
   "scikit-learn >= 1",  # for machine learning in the MOOC notebooks
   "scipy >= 1",  # fallback for reading/writing netCDF3 and for xarray interpolation features
   "seaborn >= 0.13",  # for better color palettes in plots
+  "shapely != 2.2.0", # No direct use, but 2.2.0 does not build in Docker image.
   "testbook >= 0.4",
   "xarray[io,viz] >= 2025",
 ]

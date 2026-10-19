@@ -2899,6 +2899,7 @@ dependencies = [
     { name = "scikit-learn" },
     { name = "scipy" },
     { name = "seaborn" },
+    { name = "shapely" },
     { name = "testbook" },
     { name = "xarray", extra = ["io", "viz"] },
 ]
@@ -2930,6 +2931,7 @@ requires-dist = [
     { name = "scikit-learn", specifier = ">=1" },
     { name = "scipy", specifier = ">=1" },
     { name = "seaborn", specifier = ">=0.13" },
+    { name = "shapely", specifier = "!=2.2.0" },
     { name = "testbook", specifier = ">=0.4" },
     { name = "xarray", extras = ["io", "viz"], specifier = ">=2025" },
 ]
