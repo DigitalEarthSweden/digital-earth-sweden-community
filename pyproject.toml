@@ -36,4 +36,7 @@ dependencies = [
 ]
 
 [tool.uv]
-exclude-newer = "7 days"
+# This will prevent security updates that are more recent than 7 days from
+# being used. Seems like we are waiting for the exclude-newer support in
+# Renovate.
+#exclude-newer = "7 days"
