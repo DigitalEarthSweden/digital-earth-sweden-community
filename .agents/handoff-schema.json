@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "agentic-handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "created_at",
+    "repository_key",
+    "source_runtime",
+    "source_session",
+    "target",
+    "active_goal",
+    "current_state",
+    "changed_paths",
+    "off_limits",
+    "next_steps",
+    "blockers",
+    "active_rules",
+    "commit",
+    "verification"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "repository_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_runtime": {
+      "enum": [
+        "claude",
+        "codex",
+        "mistral",
+        "human"
+      ]
+    },
+    "source_session": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "active_goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "current_state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "changed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "off_limits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "active_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "commit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "verification": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
