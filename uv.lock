@@ -3144,7 +3144,7 @@ dependencies = [
     { name = "pyyaml" },
     { name = "rasterio" },
     { name = "rioxarray", version = "0.23.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
-    { name = "rioxarray", version = "0.24.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "rioxarray", version = "0.25.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
     { name = "scikit-learn" },
     { name = "scipy" },
     { name = "seaborn" },
@@ -4648,7 +4648,7 @@ wheels = [
 
 [[package]]
 name = "rioxarray"
-version = "0.24.0"
+version = "0.25.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.15'",
@@ -4662,9 +4662,9 @@ dependencies = [
     { name = "rasterio" },
     { name = "xarray" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6a/54/b5d316ffc92347da8d9a208f8c37aebbb2adf87336eabee44516c540909e/rioxarray-0.24.0.tar.gz", hash = "sha256:b5ea51c4218e079c68e302f9cdb9ae4981a9ee6927f22d32a1abd9bb1eab929c", size = 61665, upload-time = "2026-10-29T15:49:39.427Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9f/cc/03a892b6b5dd9e7844c6b5158d11b0a3f88f29d4c890b14975c4eefc13b3/rioxarray-0.25.0.tar.gz", hash = "sha256:26b5617a2c68bbc1b1c3f104c2aa8ae4b5f787d368234106545427cbdef7db28", size = 62023, upload-time = "2026-11-24T18:03:54.842Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/63/3d03a0440d9ef1b5515e1e801a020c2730fbd33792851829624fffed6779/rioxarray-0.24.0-py3-none-any.whl", hash = "sha256:b11cece9e79d43db02c68fcb02093fac04743271d1c630a79ab3b89ba42605d3", size = 72402, upload-time = "2026-10-29T15:49:38.228Z" },
+    { url = "https://files.pythonhosted.org/packages/05/56/8a2d9d1c5dee756d10413655f6b3e2b16a8c95acbff731eb454c678099f1/rioxarray-0.25.0-py3-none-any.whl", hash = "sha256:59f5d97b5ddbca260803f59f28fbb627db2437e9f1161e394f202f8979e33aaa", size = 72818, upload-time = "2026-11-24T18:03:53.681Z" },
 ]
 
 [[package]]
